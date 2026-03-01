@@ -1,0 +1,1305 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chương 3 — Giá trị thặng dư | Tích lũy tư bản</title>
+  <meta name="color-scheme" content="dark" />
+  <style>
+    :root{
+      --bg:#070A12;
+      --bg2:#0B1022;
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.12);
+      --text:#EAF0FF;
+      --muted:#AAB6DD;
+      --muted2:#8E9AC2;
+      --accent:#7C5CFF;
+      --accent2:#22C55E;
+      --accent3:#60A5FA;
+      --warn:#F59E0B;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 20px;
+      --radius2: 14px;
+      --maxw: 1180px;
+    }
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1100px 600px at 18% 12%, rgba(124,92,255,.22), transparent 60%),
+        radial-gradient(900px 520px at 82% 18%, rgba(96,165,250,.16), transparent 58%),
+        radial-gradient(900px 520px at 70% 82%, rgba(34,197,94,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow:hidden;
+    }
+
+    /* Top UI */
+    .topbar{
+      position:fixed; inset:0 0 auto 0;
+      height:72px;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 18px;
+      background: rgba(7,10,18,.62);
+      backdrop-filter: blur(12px);
+      border-bottom:1px solid var(--border);
+      z-index:50;
+    }
+    .brand{ display:flex; align-items:center; gap:12px; min-width: 280px; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(96,165,250,.85));
+      box-shadow: 0 10px 24px rgba(124,92,255,.22);
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      position:relative; overflow:hidden;
+    }
+    .logo:before{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 45%);
+      transform: rotate(18deg);
+    }
+    .logo svg{ position:relative; z-index:1 }
+    .brand h4{ margin:0; font-size:14px; letter-spacing:.2px; }
+    .brand p{
+      margin:0; font-size:12px; color:var(--muted);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 360px;
+    }
+
+    .nav{
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+      max-width: 56vw;
+    }
+    .nav button{
+      all:unset;
+      cursor:pointer;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid transparent;
+      color: var(--muted);
+      font-size:12px;
+      transition:.18s;
+      user-select:none;
+      background: rgba(255,255,255,.02);
+    }
+    .nav button:hover{ background: rgba(255,255,255,.06) }
+    .nav button.active{
+      border-color: rgba(124,92,255,.55);
+      background: rgba(124,92,255,.14);
+      color: var(--text);
+    }
+
+    .right{ display:flex; align-items:center; gap:10px; min-width: 220px; justify-content:flex-end; }
+    .pill{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size:12px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.20);
+      user-select:none;
+    }
+    .pill b{ color:var(--text) }
+
+    .progress{
+      position:fixed; inset:72px 0 auto 0;
+      height:4px;
+      background: rgba(255,255,255,.08);
+      z-index:49;
+    }
+    .progress > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2));
+      transition: width .45s cubic-bezier(.2,.9,.2,1);
+    }
+
+    /* Slides */
+    .stage{ height:100%; padding-top:72px; }
+    .slides{
+      height:100%;
+      display:flex;
+      transition: transform .55s cubic-bezier(.2,.9,.2,1);
+      will-change: transform;
+    }
+    section{
+      min-width:100vw;
+      height:calc(100vh - 72px);
+      padding: 30px 22px 26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+    .wrap{
+      width:min(var(--maxw), 94vw);
+      display:grid;
+      gap:18px;
+    }
+    .grid2{ display:grid; grid-template-columns: 1.25fr .75fr; gap:18px; align-items:stretch; }
+    .grid3{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; align-items:stretch; }
+    .grid4{ display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; align-items:stretch; }
+
+    @media (max-width: 980px){
+      body{ overflow:auto; }
+      .slides{ flex-direction:column; transform:none !important; }
+      section{ min-width:auto; height:auto; padding: 20px 14px; }
+      .grid2{ grid-template-columns:1fr; }
+      .grid3{ grid-template-columns:1fr; }
+      .grid4{ grid-template-columns:1fr 1fr; }
+      .nav{ display:none; }
+      .brand p{ max-width: 180px; }
+    }
+
+    /* Cards / text */
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card.soft{
+      background: rgba(255,255,255,.045);
+      box-shadow: 0 12px 34px rgba(0,0,0,.35);
+    }
+    .card:before{
+      content:"";
+      position:absolute; inset:-60%;
+      background: radial-gradient(circle at 22% 18%, rgba(124,92,255,.18), transparent 45%),
+                  radial-gradient(circle at 78% 22%, rgba(96,165,250,.13), transparent 46%),
+                  radial-gradient(circle at 68% 82%, rgba(34,197,94,.10), transparent 44%);
+      transform: rotate(10deg);
+      pointer-events:none;
+    }
+    .card > *{ position:relative; z-index:1 }
+
+    .kicker{
+      font-size:12px;
+      color: var(--muted2);
+      text-transform:uppercase;
+      letter-spacing:.28em;
+    }
+    h1{ margin:10px 0 10px; font-size: 46px; line-height:1.05; letter-spacing:-.02em; }
+    h2{ margin:0 0 10px; font-size: 30px; letter-spacing:-.01em; }
+    h3{ margin:0 0 8px; font-size:18px; }
+    p{ margin:0; color: var(--muted); font-size:16px; line-height:1.65; }
+    .strong{ color:var(--text); font-weight:700 }
+    .small{ font-size:13px; color: rgba(234,240,255,.70); }
+    .divider{ height:1px; background: rgba(255,255,255,.12); margin:14px 0; }
+
+    .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .tag{
+      display:flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.86);
+      font-size:12px;
+      user-select:none;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(124,92,255,.12);
+    }
+    .dot.green{ background: var(--accent2); box-shadow: 0 0 0 4px rgba(34,197,94,.12); }
+    .dot.blue{ background: var(--accent3); box-shadow: 0 0 0 4px rgba(96,165,250,.12); }
+    .dot.warn{ background: var(--warn); box-shadow: 0 0 0 4px rgba(245,158,11,.12); }
+
+    ul{ margin:12px 0 0; padding-left:18px; color: var(--muted); line-height:1.75; }
+    li{ margin:7px 0; }
+
+    .callout{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(124,92,255,.35);
+      background: linear-gradient(180deg, rgba(124,92,255,.16), rgba(255,255,255,.03));
+      padding:14px 14px;
+      box-shadow: 0 16px 34px rgba(124,92,255,.12);
+    }
+
+    .formula{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      letter-spacing:.02em;
+      font-size: 15px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+    }
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.82);
+      font-size:12px;
+      user-select:none;
+    }
+    .badge.purple{ border-color: rgba(124,92,255,.45); background: rgba(124,92,255,.14); }
+    .badge.green{ border-color: rgba(34,197,94,.45); background: rgba(34,197,94,.12); }
+    .badge.blue{ border-color: rgba(96,165,250,.45); background: rgba(96,165,250,.12); }
+
+    /* Images */
+    .figure{
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      overflow:hidden;
+      box-shadow: 0 18px 45px rgba(0,0,0,.45);
+    }
+    .figure img{
+      width:100%;
+      height: 260px;
+      object-fit: cover;
+      display:block;
+      filter: contrast(1.03) saturate(1.02);
+    }
+    .figure .cap{
+      padding:12px 14px;
+      font-size:12px;
+      color: rgba(234,240,255,.72);
+      border-top:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+    }
+
+    /* Video */
+    .videoBox{
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.14);
+      overflow:hidden;
+      box-shadow: 0 18px 45px rgba(0,0,0,.45);
+      background: rgba(0,0,0,.25);
+    }
+    .videoBox iframe{
+      width:100%;
+      height: 340px;
+      display:block;
+      border:0;
+    }
+
+    /* Controls */
+    .controls{
+      position:fixed;
+      inset:auto 14px 14px auto;
+      z-index:60;
+      display:flex; gap:10px;
+    }
+    .btn{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 11px 13px;
+      font-weight:700;
+      box-shadow: 0 18px 38px rgba(0,0,0,.35);
+      transition: .18s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
+    .btn.primary{
+      border-color: rgba(124,92,255,.55);
+      background: rgba(124,92,255,.18);
+    }
+    .btn.primary:hover{ background: rgba(124,92,255,.24); }
+
+    /* Shimmer */
+    .shimmer{
+      background: linear-gradient(90deg, rgba(234,240,255,.92), rgba(124,92,255,.95), rgba(96,165,250,.9), rgba(234,240,255,.92));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+      background-size: 220% 100%;
+      animation: shimmer 5.5s ease-in-out infinite;
+    }
+    @keyframes shimmer{
+      0%,100%{ background-position: 0% 50% }
+      50%{ background-position: 100% 50% }
+    }
+
+    /* =========================
+       QUIZ: FIX LAYOUT + FLOW 1..20
+       ========================= */
+    .quizHead{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    /* NEW: quiz pager */
+    .quizPager{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      color: var(--muted);
+      font-size:12px;
+    }
+    .quizMeter{
+      height:8px; width:180px;
+      border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+    }
+    .quizMeter > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2));
+      transition: width .35s ease;
+    }
+
+    /* IMPORTANT: keep your content, but show 1 card only */
+    .quizGrid{
+      display:block;
+      margin-top:14px;
+    }
+
+    .qCard{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      border-radius: 20px;
+      padding:18px;
+      max-width: 860px;
+      margin: 0 auto;
+      box-shadow: 0 18px 45px rgba(0,0,0,.35);
+      display:none; /* hidden by default, JS will show current */
+    }
+    .qCard.active{ display:block; }
+
+    .qTitle{
+      display:flex; gap:12px; align-items:flex-start;
+      font-weight:900;
+      font-size:16px;
+      line-height:1.35;
+    }
+    .qNum{
+      min-width:38px; height:38px; border-radius:14px;
+      display:grid; place-items:center;
+      border:1px solid rgba(124,92,255,.45);
+      background: rgba(124,92,255,.14);
+      color: var(--text);
+      font-weight:900;
+      flex: 0 0 auto;
+    }
+
+    .choices{
+      margin:12px 0 0;
+      padding:0;
+      list-style:none;
+      color: rgba(234,240,255,.88);
+      font-size:14px;
+      line-height:1.6;
+    }
+    .choices li{
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      margin:9px 0;
+    }
+
+    .answer{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius: 14px;
+      border:1px dashed rgba(34,197,94,.45);
+      background: rgba(34,197,94,.10);
+      color: rgba(234,240,255,.94);
+      display:none;
+      font-weight:800;
+    }
+
+    /* show answer of current question ONLY */
+    .qCard.show-answer .answer{ display:block; }
+
+    /* global toggle: show answer for current q as well */
+    body.show-answers .qCard.active .answer{ display:block; }
+
+    /* small helper text inside quiz slide */
+    .quizHint{
+      margin-top:10px;
+      color: rgba(234,240,255,.72);
+      font-size:12px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M6 19V8.5C6 7.12 7.12 6 8.5 6H18" stroke="rgba(255,255,255,.92)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 19V5" stroke="rgba(255,255,255,.92)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18 19V10.5C18 9.12 16.88 8 15.5 8H6" stroke="rgba(255,255,255,.65)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <h4>Chương 3 — Giá trị thặng dư</h4>
+        <p>Phần II: <span class="strong">Tích lũy tư bản</span> (Kinh tế chính trị Mác)</p>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav"></nav>
+
+    <div class="right">
+      <div class="pill" id="counter"><b>1</b> / 11</div>
+      <div class="pill" id="modePill" style="display:none;"><b>Quiz</b> Mode</div>
+    </div>
+  </header>
+
+  <div class="progress"><div id="progressFill"></div></div>
+
+  <main class="stage">
+    <div class="slides" id="slides">
+
+      <!-- 1) NHÓM 4 (đưa lên đầu) -->
+      <section data-title="Nhóm 4">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <div class="kicker">NHÓM 4 THUYẾT TRÌNH</div>
+              <h1 class="shimmer">Thành viên</h1>
+
+              <div class="divider"></div>
+
+              <div class="grid3" style="margin-top:14px">
+                <div class="card soft">
+                  <h3>Hồ Văn Minh - IELSIU22354</h3>
+                  <p class="small">Nhóm trưởng</p>
+                </div>
+                <div class="card soft">
+                  <h3>Trần Khánh Toàn - ITITIU20322</h3>
+                  <p class="small">Thành viên</p>
+                </div>
+                <div class="card soft">
+                  <h3>Võ Hoàng Yến Nhi</h3>
+                  <p class="small">Thành viên</p>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="callout">
+                <p class="small">
+                  <b>Chủ đề:</b> Tích lũy tư bản (Chương 3 — Giá trị thặng dư trong nền kinh tế thị trường)
+                </p>
+              </div>
+            </div>
+
+            <div class="card soft">
+              <h3>Thông điệp chính</h3>
+              <p class="small">
+                “Tích lũy tư bản là cơ chế biến giá trị thặng dư thành tư bản mới —
+                vừa tạo động lực phát triển, vừa làm sâu mâu thuẫn của chủ nghĩa tư bản.”
+              </p>
+
+              <div class="divider"></div>
+
+              <div class="tags">
+                <span class="tag"><span class="dot"></span> T – H – T’</span>
+                <span class="tag"><span class="dot blue"></span> m = giá trị thặng dư</span>
+                <span class="tag"><span class="dot green"></span> Hệ quả xã hội</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2) HERO -->
+      <section data-title="Mở đầu">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <div class="kicker">PHẦN 1 — MỞ ĐẦU</div>
+              <h1 class="shimmer">“Tiền nhiều để làm gì?”</h1>
+              <p>
+                Ai cũng muốn có nhiều tiền. Nhưng trong kinh tế học Mác,
+                <span class="strong">tiền không chỉ để tiêu dùng</span> — mà còn để
+                <span class="strong">sinh ra tiền nhiều hơn</span>.
+              </p>
+
+              <div class="divider"></div>
+
+              <div class="callout">
+                <p class="small">
+                  Câu hỏi dẫn dắt: <b>“Tiền có phải là hàng hóa không?”</b><br/>
+                  Và vì sao tư bản luôn vận động theo hướng <b>mở rộng</b>?
+                </p>
+              </div>
+
+              <div class="tags">
+                <span class="tag"><span class="dot"></span> Trọng tâm: tích lũy tư bản</span>
+                <span class="tag"><span class="dot blue"></span> Logic: từ “m” → tư bản mới</span>
+                <span class="tag"><span class="dot green"></span> Liên hệ: AI/robot, Big Tech, M&A</span>
+              </div>
+            </div>
+
+            <aside class="figure">
+              <img src="assets/Kinh-te-so-eac35d3be1.png" alt="Tự động hóa và năng suất lao động" />
+              <div class="cap">Tự động hóa/robot → tăng năng suất → thúc đẩy tích lũy</div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3) VIDEO -->
+      <section data-title="Video GDucky">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <div class="kicker">VIDEO MỞ ĐẦU</div>
+              <h1 class="shimmer">GDucky — “Tiền nhiều để làm gì?”</h1>
+              <p>
+                Từ câu hỏi đời sống về “tiền”, nhóm dẫn vào cơ chế vận động của tư bản trong kinh tế học Mác:
+                <span class="strong">T – H – T’</span>.
+              </p>
+              <div class="divider"></div>
+              <div class="callout">
+                <p class="small">
+                  Trọng tâm chuyển ý: <b>T’ = T + m</b> (m là giá trị thặng dư) → nền tảng của <b>tích lũy tư bản</b>.
+                </p>
+              </div>
+            </div>
+
+            <aside class="card soft">
+              <h3>Video YouTube</h3>
+              <div class="videoBox" style="margin-top:12px">
+                <iframe
+                  src="https://www.youtube.com/embed/MTilB3tIJQw?rel=0&modestbranding=1"
+                  title="GDucky - Tiền nhiều để làm gì"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4) I. BẢN CHẤT -->
+      <section data-title="I. Bản chất">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <div class="kicker">PHẦN 2 — NỘI DUNG CHÍNH</div>
+              <h2>I. Bản chất của tích lũy tư bản</h2>
+
+              <div class="divider"></div>
+
+              <h3>1) Khái niệm</h3>
+              <p>
+                <span class="strong">Tích lũy tư bản</span> là việc nhà tư bản dùng
+                <span class="strong">một phần giá trị thặng dư</span> để tái đầu tư,
+                <span class="strong">mở rộng sản xuất</span>.
+              </p>
+
+              <div class="divider"></div>
+
+              <h3>2) Công thức vận động tư bản</h3>
+              <div class="formula" style="margin-top:10px">
+                <span class="badge purple">T – H – T’</span>
+                <span class="badge">T’ = T + m</span>
+                <span class="badge green">m = giá trị thặng dư</span>
+              </div>
+              <p class="small" style="margin-top:10px">
+                <span class="strong">Bản chất:</span> biến “m” thành <span class="strong">tư bản mới</span>.
+              </p>
+            </div>
+
+            <aside class="figure">
+              <img src="assets/images (4).jpg" alt="Minh họa tiền thúc đẩy sản xuất" />
+              <div class="cap">Tư bản vận động để sinh lời theo mục tiêu T’</div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5) Nguồn gốc + động cơ -->
+      <section data-title="Nguồn gốc & động cơ">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <h2>2) Nguồn gốc & 3) Động cơ tích lũy</h2>
+              <ul>
+                <li><span class="strong">Nguồn gốc:</span> giá trị thặng dư do <span class="strong">công nhân tạo ra</span>.</li>
+                <li><span class="strong">Nhà tư bản</span> không tiêu hết, giữ lại một phần để đầu tư.</li>
+                <li><span class="strong">Cạnh tranh</span> buộc phải mở rộng quy mô.</li>
+                <li>Nếu không tích lũy → <span class="strong">bị đào thải</span>.</li>
+                <li><span class="strong">Tích lũy</span> là <span class="strong">quy luật sống còn</span> của CNTB.</li>
+              </ul>
+
+              <div class="divider"></div>
+
+              <div class="callout">
+                <p class="small">
+                  Ví dụ: Lợi nhuận <b>1 tỷ</b> → tiêu <b>400 triệu</b> → <b>600 triệu</b> đem mở rộng nhà máy ⇒ <b>tích lũy</b>.
+                </p>
+              </div>
+            </div>
+
+            <aside class="figure">
+              <img src="assets/tich-luy-tu-ban-la-gi-477610.jpg" alt="Minh họa giá trị thặng dư" />
+              <div class="cap">m do lao động tạo ra và trở thành nguồn cho tích lũy</div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6) II. Nhân tố -->
+      <section data-title="II. Nhân tố">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <h2>II. Nhân tố ảnh hưởng đến quy mô tích lũy (4 nhóm)</h2>
+              <div class="grid4" style="margin-top:14px">
+                <div class="card soft">
+                  <div class="tag"><span class="dot"></span> 1) Bóc lột sức lao động</div>
+                  <ul>
+                    <li>Tăng năng suất lao động</li>
+                    <li>Giảm tiền lương</li>
+                    <li>→ tăng <span class="strong">m</span></li>
+                  </ul>
+                </div>
+
+                <div class="card soft">
+                  <div class="tag"><span class="dot blue"></span> 2) Năng suất lao động xã hội</div>
+                  <ul>
+                    <li>Công nghệ cao</li>
+                    <li>Chi phí giảm</li>
+                    <li>→ lợi nhuận tăng</li>
+                  </ul>
+                </div>
+
+                <div class="card soft">
+                  <div class="tag"><span class="dot green"></span> 3) TB sử dụng & tiêu dùng</div>
+                  <ul>
+                    <li>Máy móc dùng lâu dài</li>
+                    <li>Hao mòn dần</li>
+                    <li>→ thuận lợi mở rộng</li>
+                  </ul>
+                </div>
+
+                <div class="card soft">
+                  <div class="tag"><span class="dot warn"></span> 4) Quy mô TB ứng trước</div>
+                  <ul>
+                    <li>Vốn càng lớn</li>
+                    <li>Tích lũy càng nhanh</li>
+                    <li>→ lợi thế cạnh tranh</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="callout">
+                <p class="small">
+                  <b>Kết luận:</b> Quy mô tích lũy phụ thuộc vào <b>lượng giá trị thặng dư</b> và <b>điều kiện sản xuất</b>.
+                </p>
+              </div>
+            </div>
+
+            <aside class="figure">
+              <img src="assets/images (3).jpg" alt="Minh họa cạnh tranh" />
+              <div class="cap">Cạnh tranh → chạy đua công nghệ & quy mô → tích lũy nhanh hơn</div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7) III. Giàu càng giàu -->
+      <section data-title="III. Hệ quả 1">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <h2>III. Một số hệ quả (logic “giàu càng giàu”)</h2>
+              <ul>
+                <li><span class="strong">m’</span> càng cao → tích lũy càng lớn.</li>
+                <li>Tăng m’: tăng cường độ lao động, kéo dài ngày lao động, nâng cao năng suất.</li>
+                <li><span class="strong">Năng suất xã hội</span> → giảm chi phí → <span class="strong">lợi nhuận siêu ngạch</span>.</li>
+                <li><span class="strong">Quy mô tư bản ứng trước</span> lớn → lợi nhuận tuyệt đối lớn → tích lũy nhanh hơn.</li>
+                <li>→ <span class="strong">“giàu càng giàu”</span>.</li>
+              </ul>
+
+              <div class="divider"></div>
+
+              <div class="callout">
+                <p class="small">
+                  Vốn lớn + công nghệ tốt → tốc độ tái đầu tư nhanh → lợi thế càng mở rộng.
+                </p>
+              </div>
+            </div>
+
+            <aside class="figure">
+              <img src="assets/images (2).jpg" alt="Minh họa phân phối/chiếm hữu" />
+              <div class="cap">Quan hệ phân phối/chiếm hữu → phân hóa lợi ích</div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8) IV. Hệ quả -->
+      <section data-title="IV. Hệ quả 2">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <h2>IV. Hệ quả của tích lũy tư bản</h2>
+
+              <div class="grid3" style="margin-top:14px">
+                <div class="card soft">
+                  <h3>1) Tích tụ & tập trung tư bản</h3>
+                  <p class="small">
+                    <span class="badge purple">Tích tụ</span> tăng vốn từ lợi nhuận nội bộ.<br/>
+                    <span class="badge blue">Tập trung</span> sáp nhập, mua lại.
+                  </p>
+                  <div class="divider"></div>
+                  <p class="small">
+                    Tích lũy làm tư bản ngày càng tập trung vào tay ít người.
+                  </p>
+                </div>
+
+                <div class="card soft">
+                  <h3>2) “Quân đội công nghiệp dự bị”</h3>
+                  <ul>
+                    <li>Thất nghiệp cơ cấu</li>
+                    <li>Lao động bị thay bởi máy móc</li>
+                    <li>→ áp lực giảm lương</li>
+                  </ul>
+                </div>
+
+                <div class="card soft">
+                  <h3>3) Bất bình đẳng & mâu thuẫn</h3>
+                  <ul>
+                    <li>Tài sản tập trung</li>
+                    <li>Thu nhập phân hóa</li>
+                    <li><span class="strong">Mâu thuẫn:</span> sản xuất xã hội vs chiếm hữu tư nhân</li>
+                    <li>→ khủng hoảng chu kỳ</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="callout">
+                <p class="small">
+                  Tích lũy vừa thúc đẩy phát triển, vừa tạo mâu thuẫn nội tại của CNTB.
+                </p>
+              </div>
+            </div>
+
+            <aside class="figure">
+              <img src="assets/hinh-anh-2417.webp" alt="Minh họa tư bản và lao động" />
+              <div class="cap">Tích lũy kéo theo tập trung tư bản và áp lực lên lao động</div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9) V. Liên hệ -->
+      <section data-title="V. Liên hệ">
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card">
+              <h2>V. Liên hệ thực tiễn</h2>
+              <div class="grid2" style="grid-template-columns:1fr 1fr; margin-top:14px">
+                <div class="card soft">
+                  <h3>1) Thế giới</h3>
+                  <ul>
+                    <li>Các tập đoàn công nghệ mở rộng quy mô</li>
+                    <li>Bất bình đẳng toàn cầu</li>
+                    <li>Tự động hóa thay thế lao động</li>
+                    <li>M&A và thâu tóm</li>
+                  </ul>
+                </div>
+                <div class="card soft">
+                  <h3>2) Việt Nam</h3>
+                  <ul>
+                    <li>Doanh nghiệp lớn mở rộng quy mô</li>
+                    <li>Xu hướng M&A</li>
+                    <li>Khoảng cách thu nhập thành thị – nông thôn</li>
+                    <li>Công nghệ tác động việc làm</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="callout">
+                <p class="small">
+                  Liên hệ thực tiễn giúp thấy rõ cơ chế tích lũy trong nền kinh tế hiện đại.
+                </p>
+              </div>
+            </div>
+
+            <div class="card soft">
+              <h3>Thông điệp chốt</h3>
+              <p class="small">
+                Tích lũy tư bản = cơ chế biến “m” thành tư bản mới; vừa mở rộng sản xuất, vừa tạo hệ quả xã hội.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10) Kết luận -->
+      <section data-title="Kết luận">
+        <div class="wrap">
+          <div class="card">
+            <div class="kicker">KẾT</div>
+            <h1 class="shimmer">Kết luận</h1>
+
+            <div class="grid3" style="margin-top:14px">
+              <div class="card soft">
+                <h3>1) Bản chất</h3>
+                <p class="small">Tích lũy = biến <span class="strong">m</span> thành <span class="strong">tư bản mới</span>.</p>
+              </div>
+              <div class="card soft">
+                <h3>2) Động lực</h3>
+                <p class="small">Cạnh tranh buộc mở rộng quy mô → tích lũy thành <span class="strong">quy luật</span>.</p>
+              </div>
+              <div class="card soft">
+                <h3>3) Hệ quả</h3>
+                <p class="small">Tập trung tư bản, dự bị lao động, bất bình đẳng & mâu thuẫn chu kỳ.</p>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="callout">
+              <p class="small">
+                Cảm ơn thầy/cô và các bạn đã lắng nghe.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11) QUIZ -->
+      <section data-title="Câu hỏi" id="quizSlide">
+        <div class="wrap">
+          <div class="card">
+            <div class="quizHead">
+              <div>
+                <div class="kicker">PHẦN HỎI NHANH</div>
+                <h2>Câu hỏi trắc nghiệm (20 câu)</h2>
+                <p class="small">→: câu tiếp theo | ←: hiện đáp án (1 lần), bấm ← lần nữa để lùi câu trước.</p>
+
+                <div class="quizHint">
+                  Mẹo: Bạn cũng có thể bấm nút “Hiện đáp án” để bật/tắt nhanh.
+                </div>
+              </div>
+
+              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <div class="quizPager">
+                  <span id="quizCounter">Câu 1 / 20</span>
+                  <div class="quizMeter"><div id="quizFill"></div></div>
+                </div>
+                <button class="btn" id="toggleAnsBtn" type="button">Hiện đáp án</button>
+              </div>
+            </div>
+
+            <div class="quizGrid" id="quizGrid">
+
+              <!-- GIỮ NGUYÊN NỘI DUNG CÂU HỎI (y chang của bạn), chỉ thêm class active bằng JS -->
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">1</div><div>Theo C.Mác, “tích lũy tư bản” thực chất là gì?</div></div>
+                <ul class="choices">
+                  <li>A. Là việc nhà tư bản tiêu dùng hết lợi nhuận.</li>
+                  <li>B. Là việc nhà tư bản dùng giá trị thặng dư để tái đầu tư mở rộng sản xuất.</li>
+                  <li>C. Là quá trình tăng tiền lương cho công nhân.</li>
+                  <li>D. Là quá trình bán hàng hóa để thu tiền về.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">2</div><div>Công thức vận động của tư bản trong quá trình tích lũy là gì?</div></div>
+                <ul class="choices">
+                  <li>A. H - T - H</li><li>B. T - H - H</li><li>C. T - H - T'</li><li>D. H - T - T'</li>
+                </ul>
+                <div class="answer">Đáp án: C</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">3</div><div>Động cơ chính thúc đẩy nhà tư bản phải liên tục thực hiện tích lũy là gì?</div></div>
+                <ul class="choices">
+                  <li>A. Vì họ muốn từ thiện cho xã hội.</li>
+                  <li>B. Vì sự cạnh tranh, nếu không tích lũy họ sẽ bị đào thải.</li>
+                  <li>C. Vì họ muốn công nhân được làm việc nhiều hơn.</li>
+                  <li>D. Vì luật pháp quy định bắt buộc phải tích lũy.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">4</div><div>Nguồn gốc duy nhất của giá trị thặng dư (m) là:</div></div>
+                <ul class="choices">
+                  <li>A. Sự khôn khéo trong kinh doanh của nhà tư bản.</li>
+                  <li>B. Do máy móc hiện đại tạo ra.</li>
+                  <li>C. Do sức lao động của công nhân tạo ra.</li>
+                  <li>D. Do sự chênh lệch cung cầu trên thị trường.</li>
+                </ul>
+                <div class="answer">Đáp án: C</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">5</div><div>Nhóm nhân tố nào sau đây không ảnh hưởng trực tiếp đến quy mô tích lũy?</div></div>
+                <ul class="choices">
+                  <li>A. Trình độ bóc lột sức lao động.</li>
+                  <li>B. Năng suất lao động xã hội.</li>
+                  <li>C. Tỉ lệ giữa tư bản bất biến và tư bản khả biến.</li>
+                  <li>D. Sở thích cá nhân của người tiêu dùng.</li>
+                </ul>
+                <div class="answer">Đáp án: D</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">6</div><div>Tại sao năng suất lao động xã hội tăng lại thúc đẩy quy mô tích lũy?</div></div>
+                <ul class="choices">
+                  <li>A. Vì nó làm tăng chi phí sản xuất.</li>
+                  <li>B. Vì nó làm tăng thời gian làm việc của công nhân.</li>
+                  <li>C. Vì nó làm giảm giá trị hàng hóa tư liệu sản xuất, giúp tư bản rẻ hơn.</li>
+                  <li>D. Vì nó loại bỏ hoàn toàn giai cấp công nhân.</li>
+                </ul>
+                <div class="answer">Đáp án: C</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">7</div><div>Điểm khác biệt cơ bản giữa “Tích tụ tư bản” và “Tập trung tư bản” là gì?</div></div>
+                <ul class="choices">
+                  <li>A. Tích tụ là sáp nhập; Tập trung là tăng vốn từ lợi nhuận nội bộ.</li>
+                  <li>B. Tích tụ là tăng vốn từ lợi nhuận nội bộ; Tập trung là sáp nhập, mua lại.</li>
+                  <li>C. Cả hai đều giống hệt nhau về bản chất.</li>
+                  <li>D. Tích tụ do nhà nước làm; Tập trung do tư nhân làm.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">8</div><div>Khái niệm “Quân đội công nghiệp dự bị” dùng để chỉ:</div></div>
+                <ul class="choices">
+                  <li>A. Lực lượng công nhân đang làm việc chính thức.</li>
+                  <li>B. Lực lượng lao động bị sa thải do máy móc thay thế, tạo thành áp lực giảm lương.</li>
+                  <li>C. Các nhà quản lý cấp cao trong doanh nghiệp.</li>
+                  <li>D. Những người khởi nghiệp thành công.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">9</div><div>Khi Google/Microsoft mua lại startup nhỏ, đây là biểu hiện của:</div></div>
+                <ul class="choices">
+                  <li>A. Tích tụ tư bản.</li><li>B. Tập trung tư bản.</li><li>C. Sự phân hóa giàu nghèo.</li><li>D. Giảm giá trị thặng dư.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">10</div><div>Mâu thuẫn cơ bản của CNTB theo Mác là:</div></div>
+                <ul class="choices">
+                  <li>A. Giữa sản xuất mang tính xã hội hóa và hình thức chiếm hữu tư nhân.</li>
+                  <li>B. Giữa nhà tư bản và chính phủ.</li>
+                  <li>C. Giữa người bán và người mua.</li>
+                  <li>D. Giữa nông thôn và thành thị.</li>
+                </ul>
+                <div class="answer">Đáp án: A</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">11</div><div>Tăng cường độ lao động và kéo dài ngày lao động nhằm:</div></div>
+                <ul class="choices">
+                  <li>A. Tăng giá trị thặng dư tuyệt đối để đẩy mạnh tích lũy.</li>
+                  <li>B. Tăng lương cho công nhân.</li>
+                  <li>C. Giảm áp lực cạnh tranh.</li>
+                  <li>D. Giảm giá trị thặng dư tương đối.</li>
+                </ul>
+                <div class="answer">Đáp án: A</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">12</div><div>Tại sao nhà tư bản thích đầu tư AI và Robot?</div></div>
+                <ul class="choices">
+                  <li>A. Vì họ muốn công nhân được nghỉ ngơi nhiều hơn.</li>
+                  <li>B. Để tăng năng suất, giảm chi phí nhân công và tăng lợi nhuận siêu ngạch.</li>
+                  <li>C. Vì máy móc không bao giờ hỏng.</li>
+                  <li>D. Vì đây là xu hướng bắt buộc của pháp luật.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">13</div><div>“Giàu càng giàu, nghèo càng nghèo” là hệ quả của:</div></div>
+                <ul class="choices">
+                  <li>A. Quá trình tích lũy tư bản không ngừng.</li>
+                  <li>B. Chính sách thuế của nhà nước.</li>
+                  <li>C. Sự lười biếng của người nghèo.</li>
+                  <li>D. Do sự phát triển của công nghệ sinh học.</li>
+                </ul>
+                <div class="answer">Đáp án: A</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">14</div><div>Trong T’ = T + m, nếu m tăng mà tiêu dùng giữ nguyên thì:</div></div>
+                <ul class="choices">
+                  <li>A. Quy mô sản xuất bị thu hẹp.</li>
+                  <li>B. Tích lũy tư bản tăng lên.</li>
+                  <li>C. Nhà tư bản phá sản.</li>
+                  <li>D. Không ảnh hưởng gì.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">15</div><div>Vì sao khoảng cách thu nhập ngày càng lớn?</div></div>
+                <ul class="choices">
+                  <li>A. Do người giàu chăm chỉ hơn hẳn người nghèo hàng ngàn lần.</li>
+                  <li>B. Do tập trung tư bản vào tay số ít và thay thế lao động bằng máy móc.</li>
+                  <li>C. Do người nghèo không biết tiết kiệm.</li>
+                  <li>D. Do sụp đổ của kinh tế thị trường.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">16</div><div>Công ty dùng lợi nhuận năm trước để xây thêm nhà xưởng/mua máy móc mới là:</div></div>
+                <ul class="choices">
+                  <li>A. Tiêu dùng tư bản.</li>
+                  <li>B. Tập trung tư bản.</li>
+                  <li>C. Tích lũy tư bản.</li>
+                  <li>D. Phân tán tư bản.</li>
+                </ul>
+                <div class="answer">Đáp án: C</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">17</div><div>Thất nghiệp cơ cấu xảy ra khi:</div></div>
+                <ul class="choices">
+                  <li>A. Công nhân tự ý nghỉ việc hàng loạt.</li>
+                  <li>B. Lao động cũ không đáp ứng công nghệ mới.</li>
+                  <li>C. Nhà nước giảm thuế thu nhập.</li>
+                  <li>D. Do thiên tai, dịch bệnh.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">18</div><div>Mục tiêu cuối cùng của nhà tư bản trong tích lũy là:</div></div>
+                <ul class="choices">
+                  <li>A. Sản xuất giá rẻ cho người nghèo.</li>
+                  <li>B. Giải quyết việc làm cho xã hội.</li>
+                  <li>C. Cân bằng kinh tế vĩ mô.</li>
+                  <li>D. Đạt giá trị thặng dư tối đa.</li>
+                </ul>
+                <div class="answer">Đáp án: D</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">19</div><div>Tại sao tích lũy tư bản dẫn đến khủng hoảng chu kỳ?</div></div>
+                <ul class="choices">
+                  <li>A. Do sản xuất vượt quá sức mua của xã hội.</li>
+                  <li>B. Do công nhân đình công quá nhiều.</li>
+                  <li>C. Do giá vàng tăng giảm thất thường.</li>
+                  <li>D. Do nhà tư bản không muốn bán hàng.</li>
+                </ul>
+                <div class="answer">Đáp án: A</div>
+              </div>
+
+              <div class="qCard">
+                <div class="qTitle"><div class="qNum">20</div><div>Amazon sở hữu dữ liệu & hạ tầng khổng lồ là ví dụ cho:</div></div>
+                <ul class="choices">
+                  <li>A. Sự bình đẳng trong kinh doanh.</li>
+                  <li>B. Tập trung tư bản ở mức độ cao.</li>
+                  <li>C. Tích lũy tư bản tiêu cực (chỉ tiêu dùng).</li>
+                  <li>D. Sự suy thoái của tích lũy.</li>
+                </ul>
+                <div class="answer">Đáp án: B</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="controls">
+    <button class="btn" id="prevBtn" title="Prev (←)">←</button>
+    <button class="btn primary" id="nextBtn" title="Next (→)">→</button>
+  </div>
+
+  <script>
+    const slidesEl = document.getElementById('slides');
+    const sections = Array.from(document.querySelectorAll('section'));
+    const navEl = document.getElementById('nav');
+    const counterEl = document.getElementById('counter');
+    const progressFill = document.getElementById('progressFill');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const toggleAnsBtn = document.getElementById('toggleAnsBtn');
+    const modePill = document.getElementById('modePill');
+
+    // Quiz refs
+    const quizSlide = document.getElementById('quizSlide');
+    const quizGrid = document.getElementById('quizGrid');
+    const quizCards = quizGrid ? Array.from(quizGrid.querySelectorAll('.qCard')) : [];
+    const quizCounter = document.getElementById('quizCounter');
+    const quizFill = document.getElementById('quizFill');
+
+    let idx = 0;        // slide index
+    let qIdx = 0;       // quiz question index (0..19)
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+    function isQuizMode(){
+      return sections[idx] === quizSlide;
+    }
+
+    // Build nav
+    sections.forEach((s, i) => {
+      const title = s.getAttribute('data-title') || `Phần ${i+1}`;
+      const b = document.createElement('button');
+      b.textContent = title;
+      b.addEventListener('click', () => go(i));
+      navEl.appendChild(b);
+    });
+
+    function renderQuiz(){
+      if (!quizCards.length) return;
+
+      qIdx = clamp(qIdx, 0, quizCards.length - 1);
+
+      // reset all
+      quizCards.forEach((c, i) => {
+        c.classList.toggle('active', i === qIdx);
+        if (i !== qIdx) c.classList.remove('show-answer');
+      });
+
+      // counter + meter
+      if (quizCounter) quizCounter.textContent = `Câu ${qIdx + 1} / ${quizCards.length}`;
+      if (quizFill) quizFill.style.width = `${((qIdx + 1) / quizCards.length) * 100}%`;
+
+      // update toggle button label to match current state
+      if (toggleAnsBtn){
+        const current = quizCards[qIdx];
+        const showing = document.body.classList.contains('show-answers') || current.classList.contains('show-answer');
+        toggleAnsBtn.textContent = showing ? 'Ẩn đáp án' : 'Hiện đáp án';
+      }
+    }
+
+    function update(){
+      idx = clamp(idx, 0, sections.length - 1);
+      slidesEl.style.transform = `translateX(${-idx * 100}vw)`;
+
+      counterEl.innerHTML = `<b>${idx+1}</b> / ${sections.length}`;
+      progressFill.style.width = `${((idx+1)/sections.length)*100}%`;
+
+      Array.from(navEl.children).forEach((b, i) => b.classList.toggle('active', i === idx));
+
+      // show quiz pill
+      if (modePill){
+        modePill.style.display = isQuizMode() ? 'flex' : 'none';
+      }
+
+      // whenever enter quiz slide, init quiz
+      if (isQuizMode()){
+        renderQuiz();
+      } else {
+        // leaving quiz: turn off per-question reveal (keep global show-answers as user choice)
+        quizCards.forEach(c => c.classList.remove('show-answer'));
+      }
+    }
+
+    function go(i){ idx = i; update(); }
+
+    // Slide navigation (default)
+    function nextSlide(){ idx++; update(); }
+    function prevSlide(){ idx--; update(); }
+
+    // Quiz navigation rules:
+    // - Right/Next: go next question (hide local answer)
+    // - Left/Prev: if answer hidden -> show answer; else go previous question
+    function nextInQuiz(){
+      const current = quizCards[qIdx];
+      if (current) current.classList.remove('show-answer'); // reset local reveal
+      qIdx++;
+      if (qIdx >= quizCards.length) qIdx = quizCards.length - 1;
+      renderQuiz();
+    }
+
+    function prevInQuiz(){
+      const current = quizCards[qIdx];
+      if (!current) return;
+
+      // If global show-answers is ON, we treat as "already showing", so left should go previous question
+      const globalShowing = document.body.classList.contains('show-answers');
+
+      if (!globalShowing && !current.classList.contains('show-answer')){
+        // first left: show answer
+        current.classList.add('show-answer');
+      } else {
+        // second left (or global showing): go previous question
+        current.classList.remove('show-answer');
+        qIdx--;
+        if (qIdx < 0) qIdx = 0;
+        renderQuiz();
+      }
+
+      // update toggle label
+      if (toggleAnsBtn){
+        const showing = globalShowing || quizCards[qIdx].classList.contains('show-answer');
+        toggleAnsBtn.textContent = showing ? 'Ẩn đáp án' : 'Hiện đáp án';
+      }
+    }
+
+    function next(){
+      if (isQuizMode()) return nextInQuiz();
+      return nextSlide();
+    }
+    function prev(){
+      if (isQuizMode()) return prevInQuiz();
+      return prevSlide();
+    }
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    // Toggle answers button:
+    // - In quiz mode: toggle global show-answers (for current question)
+    // - Outside quiz: harmless
+    if (toggleAnsBtn){
+      toggleAnsBtn.addEventListener('click', () => {
+        document.body.classList.toggle('show-answers');
+
+        // also remove local reveal to avoid double states confusion
+        if (quizCards[qIdx]) quizCards[qIdx].classList.remove('show-answer');
+
+        const showing = document.body.classList.contains('show-answers');
+        toggleAnsBtn.textContent = showing ? 'Ẩn đáp án' : 'Hiện đáp án';
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const t = e.target;
+      const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+      if (typing) return;
+
+      if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === ' ') { e.preventDefault(); next(); }
+    });
+
+    // Init
+    update();
+  </script>
+</body>
+</html>
