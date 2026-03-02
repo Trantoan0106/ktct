@@ -22,6 +22,9 @@
       --radius: 20px;
       --radius2: 14px;
       --maxw: 1180px;
+
+      /* NEW: presentation scale (1.10–1.25). 1.18 is good for projector */
+      --scale: 1.18;
     }
     *{ box-sizing:border-box }
     html,body{ height:100% }
@@ -164,13 +167,14 @@
       border:1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 22px;
+      padding: calc(22px * var(--scale)); /* NEW: more readable spacing */
       position:relative;
       overflow:hidden;
     }
     .card.soft{
       background: rgba(255,255,255,.045);
       box-shadow: 0 12px 34px rgba(0,0,0,.35);
+      padding: calc(16px * var(--scale)); /* NEW */
     }
     .card:before{
       content:"";
@@ -184,29 +188,54 @@
     .card > *{ position:relative; z-index:1 }
 
     .kicker{
-      font-size:12px;
+      font-size: calc(12px * var(--scale));  /* NEW */
       color: var(--muted2);
       text-transform:uppercase;
       letter-spacing:.28em;
     }
-    h1{ margin:10px 0 10px; font-size: 46px; line-height:1.05; letter-spacing:-.02em; }
-    h2{ margin:0 0 10px; font-size: 30px; letter-spacing:-.01em; }
-    h3{ margin:0 0 8px; font-size:18px; }
-    p{ margin:0; color: var(--muted); font-size:16px; line-height:1.65; }
+
+    /* NEW: presentation typography */
+    h1{
+      margin:10px 0 10px;
+      font-size: calc(56px * var(--scale));
+      line-height:1.06;
+      letter-spacing:-.02em;
+    }
+    h2{
+      margin:0 0 10px;
+      font-size: calc(36px * var(--scale));
+      letter-spacing:-.01em;
+    }
+    h3{
+      margin:0 0 8px;
+      font-size: calc(20px * var(--scale));
+      line-height: 1.25;
+    }
+    p{
+      margin:0;
+      color: var(--muted);
+      font-size: calc(18px * var(--scale));
+      line-height:1.75;
+    }
     .strong{ color:var(--text); font-weight:700 }
-    .small{ font-size:13px; color: rgba(234,240,255,.70); }
-    .divider{ height:1px; background: rgba(255,255,255,.12); margin:14px 0; }
+    .small{
+      font-size: calc(15px * var(--scale));
+      color: rgba(234,240,255,.78);
+      line-height: 1.65;
+    }
+    .divider{ height:1px; background: rgba(255,255,255,.12); margin: calc(14px * var(--scale)) 0; }
 
     .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
     .tag{
       display:flex; align-items:center; gap:8px;
-      padding:8px 10px;
+      padding: calc(8px * var(--scale)) calc(10px * var(--scale));
       border-radius:999px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
       color: rgba(234,240,255,.86);
-      font-size:12px;
+      font-size: calc(12px * var(--scale));
       user-select:none;
+      white-space: nowrap;
     }
     .dot{
       width:8px; height:8px; border-radius:999px;
@@ -217,35 +246,42 @@
     .dot.blue{ background: var(--accent3); box-shadow: 0 0 0 4px rgba(96,165,250,.12); }
     .dot.warn{ background: var(--warn); box-shadow: 0 0 0 4px rgba(245,158,11,.12); }
 
-    ul{ margin:12px 0 0; padding-left:18px; color: var(--muted); line-height:1.75; }
-    li{ margin:7px 0; }
+    ul{
+      margin: calc(12px * var(--scale)) 0 0;
+      padding-left: calc(18px * var(--scale));
+      color: var(--muted);
+      line-height:1.8;
+      font-size: calc(18px * var(--scale)); /* NEW: make list readable */
+    }
+    li{ margin: calc(7px * var(--scale)) 0; }
 
     .callout{
       border-radius: var(--radius2);
       border: 1px solid rgba(124,92,255,.35);
       background: linear-gradient(180deg, rgba(124,92,255,.16), rgba(255,255,255,.03));
-      padding:14px 14px;
+      padding: calc(14px * var(--scale)) calc(14px * var(--scale));
       box-shadow: 0 16px 34px rgba(124,92,255,.12);
     }
 
     .formula{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       letter-spacing:.02em;
-      font-size: 15px;
-      padding: 12px 14px;
+      font-size: calc(16px * var(--scale)); /* NEW */
+      padding: calc(12px * var(--scale)) calc(14px * var(--scale));
       border-radius: 14px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
       display:flex; flex-wrap:wrap; gap:10px; align-items:center;
     }
     .badge{
-      padding:6px 10px;
+      padding: calc(6px * var(--scale)) calc(10px * var(--scale));
       border-radius:999px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
       color: rgba(234,240,255,.82);
-      font-size:12px;
+      font-size: calc(12px * var(--scale));
       user-select:none;
+      white-space: nowrap;
     }
     .badge.purple{ border-color: rgba(124,92,255,.45); background: rgba(124,92,255,.14); }
     .badge.green{ border-color: rgba(34,197,94,.45); background: rgba(34,197,94,.12); }
@@ -261,14 +297,14 @@
     }
     .figure img{
       width:100%;
-      height: 260px;
+      height: 300px; /* NEW: bigger for projector */
       object-fit: cover;
       display:block;
       filter: contrast(1.03) saturate(1.02);
     }
     .figure .cap{
-      padding:12px 14px;
-      font-size:12px;
+      padding: calc(12px * var(--scale)) calc(14px * var(--scale));
+      font-size: calc(12px * var(--scale));
       color: rgba(234,240,255,.72);
       border-top:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.18);
@@ -284,7 +320,7 @@
     }
     .videoBox iframe{
       width:100%;
-      height: 340px;
+      height: 380px; /* NEW: bigger for projector */
       display:block;
       border:0;
     }
@@ -302,11 +338,12 @@
       background: rgba(255,255,255,.05);
       color: var(--text);
       border-radius: 14px;
-      padding: 11px 13px;
-      font-weight:700;
+      padding: calc(11px * var(--scale)) calc(13px * var(--scale));
+      font-weight:800;
       box-shadow: 0 18px 38px rgba(0,0,0,.35);
       transition: .18s ease;
       user-select:none;
+      font-size: calc(14px * var(--scale)); /* NEW */
     }
     .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
     .btn.primary{
@@ -337,14 +374,13 @@
       flex-wrap:wrap;
     }
 
-    /* NEW: quiz pager */
     .quizPager{
       display:flex; align-items:center; gap:10px; flex-wrap:wrap;
       color: var(--muted);
-      font-size:12px;
+      font-size: calc(12px * var(--scale));
     }
     .quizMeter{
-      height:8px; width:180px;
+      height:10px; width:220px; /* NEW */
       border-radius:999px;
       background: rgba(255,255,255,.10);
       border: 1px solid rgba(255,255,255,.10);
@@ -357,90 +393,88 @@
       transition: width .35s ease;
     }
 
-    /* IMPORTANT: keep your content, but show 1 card only */
     .quizGrid{
       display:block;
-      margin-top:14px;
+      margin-top: calc(14px * var(--scale));
     }
 
     .qCard{
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
       border-radius: 20px;
-      padding:18px;
-      max-width: 860px;
+      padding: calc(18px * var(--scale));
+      max-width: 920px;  /* NEW */
       margin: 0 auto;
       box-shadow: 0 18px 45px rgba(0,0,0,.35);
-      display:none; /* hidden by default, JS will show current */
+      display:none;
     }
     .qCard.active{ display:block; }
 
     .qTitle{
       display:flex; gap:12px; align-items:flex-start;
       font-weight:900;
-      font-size:16px;
-      line-height:1.35;
+      font-size: calc(18px * var(--scale)); /* NEW */
+      line-height:1.4;
     }
     .qNum{
-      min-width:38px; height:38px; border-radius:14px;
+      min-width:44px; height:44px; /* NEW */
+      border-radius:14px;
       display:grid; place-items:center;
       border:1px solid rgba(124,92,255,.45);
       background: rgba(124,92,255,.14);
       color: var(--text);
       font-weight:900;
       flex: 0 0 auto;
+      font-size: calc(16px * var(--scale)); /* NEW */
     }
 
     .choices{
-      margin:12px 0 0;
+      margin: calc(12px * var(--scale)) 0 0;
       padding:0;
       list-style:none;
       color: rgba(234,240,255,.88);
-      font-size:14px;
-      line-height:1.6;
+      font-size: calc(16px * var(--scale)); /* NEW */
+      line-height:1.75;
     }
     .choices li{
-      padding:10px 12px;
+      padding: calc(12px * var(--scale)) calc(14px * var(--scale)); /* NEW */
       border-radius: 14px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.12);
-      margin:9px 0;
+      margin: calc(9px * var(--scale)) 0;
     }
 
     .answer{
-      margin-top:12px;
-      padding:12px 14px;
+      margin-top: calc(12px * var(--scale));
+      padding: calc(12px * var(--scale)) calc(14px * var(--scale));
       border-radius: 14px;
       border:1px dashed rgba(34,197,94,.45);
       background: rgba(34,197,94,.10);
       color: rgba(234,240,255,.94);
       display:none;
-      font-weight:800;
+      font-weight:900;
+      font-size: calc(16px * var(--scale)); /* NEW */
     }
 
-    /* show answer of current question ONLY */
     .qCard.show-answer .answer{ display:block; }
-
-    /* global toggle: show answer for current q as well */
     body.show-answers .qCard.active .answer{ display:block; }
 
-    /* small helper text inside quiz slide */
     .quizHint{
-      margin-top:10px;
+      margin-top: calc(10px * var(--scale));
       color: rgba(234,240,255,.72);
-      font-size:12px;
+      font-size: calc(12px * var(--scale));
     }
 
-    /* ===== Members avatars (NEW) ===== */
+    /* ===== Members avatars ===== */
     .memberCard{
       display:flex;
       flex-direction:column;
-      gap:10px;
-      padding:16px;
+      gap:12px;
+      padding: calc(16px * var(--scale));
     }
     .memberAvatar{
       width:100%;
-      height:210px;
+      height:260px; /* NEW: bigger */
       border-radius:16px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.12);
@@ -456,17 +490,393 @@
       filter: contrast(1.03) saturate(1.05);
     }
     .memberMeta h3{
-      margin:0 0 4px;
-      font-size:16px;
+      margin:0 0 6px;
+      font-size: calc(18px * var(--scale)); /* NEW */
       line-height:1.25;
     }
     .memberMeta .small{
       margin:0;
-    }
-    @media (max-width: 980px){
-      .memberAvatar{ height:240px; }
+      font-size: calc(15px * var(--scale));
     }
 
+    @media (max-width: 980px){
+      .memberAvatar{ height:300px; }
+    }
+    /* =========================
+   FIX OVERFLOW for 2 slides
+   ========================= */
+
+/* 1) Slide "Nhóm 4" - member cards gọn lại */
+section[data-title="Nhóm 4"] .grid3{
+  gap: 12px;
+}
+
+section[data-title="Nhóm 4"] .memberCard{
+  padding: 14px;
+  gap: 10px;
+}
+
+section[data-title="Nhóm 4"] .memberAvatar{
+  height: 210px;            /* giảm chiều cao ảnh */
+  border-radius: 16px;
+}
+
+section[data-title="Nhóm 4"] .memberMeta h3{
+  font-size: 18px;
+  line-height: 1.25;
+  margin-bottom: 6px;
+
+  /* chống tên quá dài */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+section[data-title="Nhóm 4"] .memberMeta .small{
+  font-size: 14px;
+}
+
+/* 2) Slide "II. Nhân tố" - 4 card nhỏ bị dài -> thu gọn + chữ vừa */
+section[data-title="II. Nhân tố"] h2{
+  font-size: 40px;          /* giảm nhẹ tiêu đề slide này */
+  line-height: 1.15;
+}
+
+section[data-title="II. Nhân tố"] .grid4{
+  gap: 12px;
+}
+
+section[data-title="II. Nhân tố"] .grid4 .card.soft{
+  padding: 14px;            /* giảm padding để bớt dài */
+  border-radius: 18px;
+}
+
+/* tag tiêu đề trong mỗi card */
+section[data-title="II. Nhân tố"] .grid4 .card.soft .tag{
+  font-size: 12px;
+  padding: 8px 10px;
+}
+
+/* list bên trong 4 card nhỏ: giảm font + giảm khoảng cách dòng */
+section[data-title="II. Nhân tố"] .grid4 .card.soft ul{
+  font-size: 16px;          /* quan trọng: nhỏ lại để không tràn */
+  line-height: 1.55;
+  margin-top: 10px;
+  padding-left: 18px;
+}
+
+section[data-title="II. Nhân tố"] .grid4 .card.soft li{
+  margin: 6px 0;
+}
+
+/* nếu vẫn bị hơi dài: giới hạn chiều cao và cho cuộn nhẹ bên trong */
+section[data-title="II. Nhân tố"] .grid4 .card.soft{
+  max-height: 280px;
+  overflow: auto;
+}
+
+/* scrollbar nhỏ gọn (đẹp hơn khi có cuộn) */
+section[data-title="II. Nhân tố"] .grid4 .card.soft::-webkit-scrollbar{
+  width: 8px;
+}
+section[data-title="II. Nhân tố"] .grid4 .card.soft::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border-radius: 999px;
+}
+/* =========================
+   Hide scrollbars (still scrollable) - II. Nhân tố
+   ========================= */
+
+/* Không cho scroll ngang toàn slide này */
+section[data-title="II. Nhân tố"]{
+  overflow-x: hidden;
+}
+
+/* Card nhỏ: vẫn cho cuộn dọc nếu thiếu chỗ, nhưng ẨN thanh scrollbar */
+section[data-title="II. Nhân tố"] .grid4 .card.soft{
+  overflow-y: auto;     /* vẫn cuộn dọc */
+  overflow-x: hidden;   /* không cuộn ngang */
+  scrollbar-width: none; /* Firefox: ẩn scrollbar */
+  -ms-overflow-style: none; /* IE/Edge cũ */
+}
+
+/* Chrome/Safari/Edge: ẩn scrollbar */
+section[data-title="II. Nhân tố"] .grid4 .card.soft::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
+/* =========================
+   FIX overflow - Slide IV. Hệ quả 2
+   ========================= */
+
+/* Giảm nhẹ tiêu đề ở slide này để chừa chỗ */
+section[data-title="IV. Hệ quả 2"] h2{
+  font-size: 38px;
+  line-height: 1.15;
+}
+
+/* 3 card bên trái: thu padding + chữ nhỏ nhẹ */
+section[data-title="IV. Hệ quả 2"] .grid3 .card.soft{
+  padding: 14px;
+}
+
+/* List trong slide này: nhỏ lại để không tràn */
+section[data-title="IV. Hệ quả 2"] .grid3 .card.soft ul{
+  font-size: 16px;
+  line-height: 1.55;
+  margin-top: 10px;
+  padding-left: 18px;
+}
+section[data-title="IV. Hệ quả 2"] .grid3 .card.soft li{
+  margin: 6px 0;
+}
+
+/* Cột trái (card lớn): nếu quá dài thì cuộn dọc nhưng ẨN scrollbar */
+section[data-title="IV. Hệ quả 2"] .card{
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* Edge cũ */
+}
+section[data-title="IV. Hệ quả 2"] .card::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
+
+/* Ảnh bên phải: giảm chiều cao 1 chút cho cân bố cục */
+section[data-title="IV. Hệ quả 2"] .figure img{
+  height: 280px;
+}
+/* =========================
+   FIX right-side figure empty space (global)
+   Make .figure stretch full height, image fills remaining space
+   ========================= */
+
+/* Cho grid2 2 cột đều cao bằng nhau */
+.grid2{
+  align-items: stretch;
+}
+
+/* Figure/card bên phải sẽ cao bằng cột trái */
+.grid2 > .figure,
+.grid2 > aside.figure{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ảnh chiếm hết không gian còn lại, không dư khoảng trống */
+.figure img{
+  height: auto !important;     /* override các height cũ */
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Caption nằm dưới, không đẩy dư */
+.figure .cap{
+  flex: 0 0 auto;
+}
+
+/* Một số slide bạn dùng <aside class="card soft"> chứa video/ảnh:
+   nếu muốn nó cũng full height như cột trái */
+.grid2 > .card.soft{
+  height: 100%;
+}
+/* =========================
+   FIX right-side TEXT cards looking empty
+   ========================= */
+
+/* Card bên phải (text) full-height + layout đẹp */
+
+
+/* Nếu màn hình thấp, giảm phần fill để không tràn */
+@media (max-height: 820px){
+  .grid2 > .card.soft::after{ height: 170px; }
+}
+/* =========================
+   FIX: right text card look intentional (no extra boxes)
+   ========================= */
+
+/* Chỉ áp dụng cho card "Thông điệp chính" ở slide Nhóm 4 */
+section[data-title="Nhóm 4"] .grid2 > .card.soft{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Đẩy nội dung lên giữa cho cân */
+section[data-title="Nhóm 4"] .grid2 > .card.soft > h3{
+  margin-top: 6px;
+}
+
+section[data-title="Nhóm 4"] .grid2 > .card.soft > p{
+  margin-top: 10px;
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+/* “tags” nằm dưới cùng card */
+section[data-title="Nhóm 4"] .grid2 > .card.soft .tags{
+  margin-top: auto;
+}
+/* =========================
+   FIX: Slide V (Liên hệ) fit on screen
+   ========================= */
+section[data-title="V. Liên hệ"] .grid2{
+  align-items: stretch;
+}
+
+/* Giảm padding riêng slide này để vừa khít */
+section[data-title="V. Liên hệ"] .card{
+  padding: 18px;
+}
+section[data-title="V. Liên hệ"] .card.soft{
+  padding: 18px;
+}
+
+/* Bullet list gọn hơn để không tràn */
+section[data-title="V. Liên hệ"] ul{
+  font-size: 16px;
+  line-height: 1.55;
+  margin-top: 10px;
+  padding-left: 18px;
+}
+section[data-title="V. Liên hệ"] li{
+  margin: 6px 0;
+}
+/* =========================
+   FIX empty-looking bottom area on Video GDucky slide
+   ========================= */
+
+/* Tắt lớp nền trang trí (card:before) riêng slide Video GDucky */
+section[data-title="Video GDucky"] .card::before,
+section[data-title="Video GDucky"] .card.soft::before{
+  display: none !important;
+}
+
+/* Giảm padding-bottom để đáy card gọn hơn */
+section[data-title="Video GDucky"] .card,
+section[data-title="Video GDucky"] .card.soft{
+  padding-bottom: 14px !important;
+}
+
+/* Nếu muốn cân cột phải đẹp hơn: video chiếm nhiều hơn, bớt khoảng trống dưới */
+section[data-title="Video GDucky"] .videoBox iframe{
+  height: 420px !important;
+}
+/* Remove the empty gradient box under the YouTube video (Video GDucky slide) */
+section[data-title="Video GDucky"] .videoBox + div{
+  display: none !important;
+}
+section[data-title="Video GDucky"] .card.soft{
+  display:flex;
+  flex-direction:column;
+}
+section[data-title="Video GDucky"] .videoBox{
+  flex:1;
+}
+section[data-title="Video GDucky"] .videoBox iframe{
+  height:100% !important;
+}
+/* =========================
+   FINAL FIX — remove all unwanted empty blocks on:
+   - Video GDucky
+   - V. Liên hệ
+   ========================= */
+
+/* 1) TẮT HẲN pseudo-element tạo "box dư" (đang gây lỗi trên nhiều slide) */
+.grid2 > .card.soft::after{
+  content: none !important;
+  display: none !important;
+}
+
+/* 2) VIDEO GDUCKY: card phải chỉ có video, không dư */
+section[data-title="Video GDucky"] .grid2 > .card.soft{
+  height: 100%;
+  display:flex;
+  flex-direction:column;
+}
+
+section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox{
+  flex: 1 1 auto;
+  margin-top: 12px;
+}
+
+section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox iframe{
+  height: 100% !important;
+}
+
+/* Nếu bạn còn 1 div rỗng dưới video (nếu lỡ thêm), ẩn luôn */
+section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox ~ div{
+  display:none !important;
+}
+
+/* 3) V. LIÊN HỆ: card phải không dư, căn giữa nội dung như "key takeaway" */
+section[data-title="V. Liên hệ"] .grid2 > .card.soft{
+  height: 100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+/* giảm spacing nhẹ để vừa khít, không tràn */
+section[data-title="V. Liên hệ"] .card{
+  padding: 18px !important;
+}
+section[data-title="V. Liên hệ"] .card.soft{
+  padding: 18px !important;
+}
+
+section[data-title="V. Liên hệ"] ul{
+  font-size: 16px !important;
+  line-height: 1.55 !important;
+  margin-top: 10px !important;
+  padding-left: 18px !important;
+}
+section[data-title="V. Liên hệ"] li{
+  margin: 6px 0 !important;
+}
+/* =========================
+   Nhóm 4 - đưa 3 tag vào giữa vùng trống + phóng to
+   ========================= */
+
+/* Card bên phải slide Nhóm 4 dùng flex để chia layout */
+section[data-title="Nhóm 4"] .grid2 > .card.soft{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Đưa cụm tag lên giữa phần trống */
+section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags{
+  margin-top: auto;       /* đẩy xuống */
+  margin-bottom: auto;    /* kéo lên => nằm giữa */
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Phóng to tag cho cân bố cục */
+section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .tag{
+  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: 999px;
+}
+
+/* Phóng to dot cho đẹp */
+section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot{
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 0 5px rgba(124,92,255,.12);
+}
+section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.blue{
+  box-shadow: 0 0 0 5px rgba(96,165,250,.12);
+}
+section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
+  box-shadow: 0 0 0 5px rgba(34,197,94,.12);
+}
   </style>
 </head>
 <body>
@@ -499,7 +909,7 @@
   <main class="stage">
     <div class="slides" id="slides">
 
-      <!-- 1) NHÓM 4 (đưa lên đầu) -->
+      <!-- 1) NHÓM 4 -->
       <section data-title="Nhóm 4">
         <div class="wrap">
           <div class="grid2">
@@ -510,7 +920,7 @@
               <div class="divider"></div>
 
               <div class="grid3" style="margin-top:14px">
-                <!-- Minh: ảnh 1 -->
+                <!-- Hồ Văn Minh: ảnh 1 -->
                 <div class="card soft memberCard">
                   <div class="memberAvatar">
                     <img src="assets/member-minh.jpg" alt="Hồ Văn Minh" />
@@ -521,7 +931,7 @@
                   </div>
                 </div>
 
-                <!-- Toàn: ảnh 3 -->
+                <!-- Trần Khánh Toàn: ảnh 3 -->
                 <div class="card soft memberCard">
                   <div class="memberAvatar">
                     <img src="assets/member-toan.jpg" alt="Trần Khánh Toàn" />
@@ -532,7 +942,7 @@
                   </div>
                 </div>
 
-                <!-- Nhi: ảnh 2 + mã -->
+                <!-- Võ Hoàng Yến Nhi: ảnh 2 + FAFBIU22130 -->
                 <div class="card soft memberCard">
                   <div class="memberAvatar">
                     <img src="assets/member-nhi.jpg" alt="Võ Hoàng Yến Nhi" />
@@ -562,7 +972,7 @@
 
               <div class="divider"></div>
 
-              <div class="tags">
+              <div class="tags heroTags">
                 <span class="tag"><span class="dot"></span> T – H – T’</span>
                 <span class="tag"><span class="dot blue"></span> m = giá trị thặng dư</span>
                 <span class="tag"><span class="dot green"></span> Hệ quả xã hội</span>
@@ -623,7 +1033,7 @@
               <div class="divider"></div>
               <div class="callout">
                 <p class="small">
-                  Trọng tâm chuyển ý: <b>T’ = T + m</b> (m là giá trị thặng dư) → nền tảng của <b>tích lũy tư bản</b>.
+                  Trọng tâm: <b>T’ = T + m</b> (m là giá trị thặng dư) → nền tảng của <b>tích lũy tư bản</b>.
                 </p>
               </div>
             </div>
@@ -773,7 +1183,7 @@
         </div>
       </section>
 
-      <!-- 7) III. Giàu càng giàu -->
+      <!-- 7) III. Hệ quả 1 -->
       <section data-title="III. Hệ quả 1">
         <div class="wrap">
           <div class="grid2">
@@ -804,7 +1214,7 @@
         </div>
       </section>
 
-      <!-- 8) IV. Hệ quả -->
+      <!-- 8) IV. Hệ quả 2 -->
       <section data-title="IV. Hệ quả 2">
         <div class="wrap">
           <div class="grid2">
@@ -961,6 +1371,7 @@
 
             <div class="quizGrid" id="quizGrid">
 
+              <!-- GIỮ NGUYÊN NỘI DUNG CÂU HỎI -->
               <div class="qCard">
                 <div class="qTitle"><div class="qNum">1</div><div>Theo C.Mác, “tích lũy tư bản” thực chất là gì?</div></div>
                 <ul class="choices">
@@ -1228,17 +1639,14 @@
 
       qIdx = clamp(qIdx, 0, quizCards.length - 1);
 
-      // reset all
       quizCards.forEach((c, i) => {
         c.classList.toggle('active', i === qIdx);
         if (i !== qIdx) c.classList.remove('show-answer');
       });
 
-      // counter + meter
       if (quizCounter) quizCounter.textContent = `Câu ${qIdx + 1} / ${quizCards.length}`;
       if (quizFill) quizFill.style.width = `${((qIdx + 1) / quizCards.length) * 100}%`;
 
-      // update toggle button label to match current state
       if (toggleAnsBtn){
         const current = quizCards[qIdx];
         const showing = document.body.classList.contains('show-answers') || current.classList.contains('show-answer');
@@ -1255,32 +1663,25 @@
 
       Array.from(navEl.children).forEach((b, i) => b.classList.toggle('active', i === idx));
 
-      // show quiz pill
       if (modePill){
         modePill.style.display = isQuizMode() ? 'flex' : 'none';
       }
 
-      // whenever enter quiz slide, init quiz
       if (isQuizMode()){
         renderQuiz();
       } else {
-        // leaving quiz: turn off per-question reveal (keep global show-answers as user choice)
         quizCards.forEach(c => c.classList.remove('show-answer'));
       }
     }
 
     function go(i){ idx = i; update(); }
 
-    // Slide navigation (default)
     function nextSlide(){ idx++; update(); }
     function prevSlide(){ idx--; update(); }
 
-    // Quiz navigation rules:
-    // - Right/Next: go next question (hide local answer)
-    // - Left/Prev: if answer hidden -> show answer; else go previous question
     function nextInQuiz(){
       const current = quizCards[qIdx];
-      if (current) current.classList.remove('show-answer'); // reset local reveal
+      if (current) current.classList.remove('show-answer');
       qIdx++;
       if (qIdx >= quizCards.length) qIdx = quizCards.length - 1;
       renderQuiz();
@@ -1290,21 +1691,17 @@
       const current = quizCards[qIdx];
       if (!current) return;
 
-      // If global show-answers is ON, we treat as "already showing", so left should go previous question
       const globalShowing = document.body.classList.contains('show-answers');
 
       if (!globalShowing && !current.classList.contains('show-answer')){
-        // first left: show answer
         current.classList.add('show-answer');
       } else {
-        // second left (or global showing): go previous question
         current.classList.remove('show-answer');
         qIdx--;
         if (qIdx < 0) qIdx = 0;
         renderQuiz();
       }
 
-      // update toggle label
       if (toggleAnsBtn){
         const showing = globalShowing || quizCards[qIdx].classList.contains('show-answer');
         toggleAnsBtn.textContent = showing ? 'Ẩn đáp án' : 'Hiện đáp án';
@@ -1323,14 +1720,9 @@
     prevBtn.addEventListener('click', prev);
     nextBtn.addEventListener('click', next);
 
-    // Toggle answers button:
-    // - In quiz mode: toggle global show-answers (for current question)
-    // - Outside quiz: harmless
     if (toggleAnsBtn){
       toggleAnsBtn.addEventListener('click', () => {
         document.body.classList.toggle('show-answers');
-
-        // also remove local reveal to avoid double states confusion
         if (quizCards[qIdx]) quizCards[qIdx].classList.remove('show-answer');
 
         const showing = document.body.classList.contains('show-answers');
@@ -1348,7 +1740,6 @@
       if (e.key === ' ') { e.preventDefault(); next(); }
     });
 
-    // Init
     update();
   </script>
 </body>
