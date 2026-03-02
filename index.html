@@ -22,8 +22,6 @@
       --radius: 20px;
       --radius2: 14px;
       --maxw: 1180px;
-
-      /* NEW: presentation scale (1.10–1.25). 1.18 is good for projector */
       --scale: 1.18;
     }
     *{ box-sizing:border-box }
@@ -167,14 +165,14 @@
       border:1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: calc(22px * var(--scale)); /* NEW: more readable spacing */
+      padding: calc(22px * var(--scale));
       position:relative;
       overflow:hidden;
     }
     .card.soft{
       background: rgba(255,255,255,.045);
       box-shadow: 0 12px 34px rgba(0,0,0,.35);
-      padding: calc(16px * var(--scale)); /* NEW */
+      padding: calc(16px * var(--scale));
     }
     .card:before{
       content:"";
@@ -188,13 +186,12 @@
     .card > *{ position:relative; z-index:1 }
 
     .kicker{
-      font-size: calc(12px * var(--scale));  /* NEW */
+      font-size: calc(12px * var(--scale));
       color: var(--muted2);
       text-transform:uppercase;
       letter-spacing:.28em;
     }
 
-    /* NEW: presentation typography */
     h1{
       margin:10px 0 10px;
       font-size: calc(56px * var(--scale));
@@ -251,7 +248,7 @@
       padding-left: calc(18px * var(--scale));
       color: var(--muted);
       line-height:1.8;
-      font-size: calc(18px * var(--scale)); /* NEW: make list readable */
+      font-size: calc(18px * var(--scale));
     }
     li{ margin: calc(7px * var(--scale)) 0; }
 
@@ -266,7 +263,7 @@
     .formula{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       letter-spacing:.02em;
-      font-size: calc(16px * var(--scale)); /* NEW */
+      font-size: calc(16px * var(--scale));
       padding: calc(12px * var(--scale)) calc(14px * var(--scale));
       border-radius: 14px;
       border:1px solid rgba(255,255,255,.12);
@@ -297,7 +294,7 @@
     }
     .figure img{
       width:100%;
-      height: 300px; /* NEW: bigger for projector */
+      height: 300px;
       object-fit: cover;
       display:block;
       filter: contrast(1.03) saturate(1.02);
@@ -320,7 +317,7 @@
     }
     .videoBox iframe{
       width:100%;
-      height: 380px; /* NEW: bigger for projector */
+      height: 380px;
       display:block;
       border:0;
     }
@@ -343,7 +340,7 @@
       box-shadow: 0 18px 38px rgba(0,0,0,.35);
       transition: .18s ease;
       user-select:none;
-      font-size: calc(14px * var(--scale)); /* NEW */
+      font-size: calc(14px * var(--scale));
     }
     .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
     .btn.primary{
@@ -366,9 +363,7 @@
       50%{ background-position: 100% 50% }
     }
 
-    /* =========================
-       QUIZ: FIX LAYOUT + FLOW 1..20
-       ========================= */
+    /* Quiz styles */
     .quizHead{
       display:flex; gap:12px; align-items:center; justify-content:space-between;
       flex-wrap:wrap;
@@ -380,7 +375,7 @@
       font-size: calc(12px * var(--scale));
     }
     .quizMeter{
-      height:10px; width:220px; /* NEW */
+      height:10px; width:220px;
       border-radius:999px;
       background: rgba(255,255,255,.10);
       border: 1px solid rgba(255,255,255,.10);
@@ -403,7 +398,7 @@
       background: rgba(255,255,255,.04);
       border-radius: 20px;
       padding: calc(18px * var(--scale));
-      max-width: 920px;  /* NEW */
+      max-width: 920px;
       margin: 0 auto;
       box-shadow: 0 18px 45px rgba(0,0,0,.35);
       display:none;
@@ -413,11 +408,11 @@
     .qTitle{
       display:flex; gap:12px; align-items:flex-start;
       font-weight:900;
-      font-size: calc(18px * var(--scale)); /* NEW */
+      font-size: calc(18px * var(--scale));
       line-height:1.4;
     }
     .qNum{
-      min-width:44px; height:44px; /* NEW */
+      min-width:44px; height:44px;
       border-radius:14px;
       display:grid; place-items:center;
       border:1px solid rgba(124,92,255,.45);
@@ -425,7 +420,7 @@
       color: var(--text);
       font-weight:900;
       flex: 0 0 auto;
-      font-size: calc(16px * var(--scale)); /* NEW */
+      font-size: calc(16px * var(--scale));
     }
 
     .choices{
@@ -433,11 +428,11 @@
       padding:0;
       list-style:none;
       color: rgba(234,240,255,.88);
-      font-size: calc(16px * var(--scale)); /* NEW */
+      font-size: calc(16px * var(--scale));
       line-height:1.75;
     }
     .choices li{
-      padding: calc(12px * var(--scale)) calc(14px * var(--scale)); /* NEW */
+      padding: calc(12px * var(--scale)) calc(14px * var(--scale));
       border-radius: 14px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.12);
@@ -453,7 +448,7 @@
       color: rgba(234,240,255,.94);
       display:none;
       font-weight:900;
-      font-size: calc(16px * var(--scale)); /* NEW */
+      font-size: calc(16px * var(--scale));
     }
 
     .qCard.show-answer .answer{ display:block; }
@@ -465,45 +460,64 @@
       font-size: calc(12px * var(--scale));
     }
 
-    /* ===== Members avatars ===== */
+    /* ===== FIXED: Members avatars - RÕ NÉT NHƯ ZOOM GẦN ===== */
     .memberCard{
       display:flex;
       flex-direction:column;
       gap:12px;
       padding: calc(16px * var(--scale));
     }
+
     .memberAvatar{
       width:100%;
-      height:260px; /* NEW: bigger */
+      height:260px;
       border-radius:16px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
+      background: #0b1022;
       box-shadow: 0 12px 30px rgba(0,0,0,.35);
+      
+      /* ÉP CHẾ ĐỘ HIỂN THỊ PIXEL HOÀN HẢO */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: visible;
+      -webkit-backface-visibility: visible;
     }
+
     .memberAvatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit: cover;
+      object-position: center;
+      
+      /* QUAN TRỌNG: ÉP HIỂN THỊ SẮC NÉT NHƯ ZOOM GẦN */
+      image-rendering: -webkit-optimize-contrast;  /* Safari */
+      image-rendering: crisp-edges;                 /* Firefox */
+      image-rendering: pixelated;                    /* Chrome */
+      -ms-interpolation-mode: nearest-neighbor;      /* IE */
+      
+      /* LOẠI BỎ MỌI LÀM MỊN */
+      filter: none;
+      -webkit-font-smoothing: none;
+      font-smooth: never;
+      
+      /* MẸO: Scale siêu nhẹ để kích hoạt rendering đúng */
+      transform: scale(1.01);
+    }
 
-  /* FIX: tránh blur/bệt màu */
-  transform: none;              /* bỏ translateZ */
-  filter: none;                 /* bỏ filter làm bệt */
-  image-rendering: auto;
-}
-.memberAvatar{
-  background: #0b1022; /* nền tối ổn định */
-}
+    /* Tùy chỉnh độ sáng nhẹ cho từng ảnh */
+    .memberCard:first-child .memberAvatar img{
+      filter: brightness(1.05);
+    }
 
-.memberAvatar img{
-  /* crisp nhẹ */
-  -webkit-font-smoothing: antialiased;
-  backface-visibility: hidden;
-}
+    .memberCard:last-child .memberAvatar img{
+      filter: brightness(1.03) contrast(0.98);
+    }
+
     .memberMeta h3{
       margin:0 0 6px;
-      font-size: calc(18px * var(--scale)); /* NEW */
+      font-size: calc(18px * var(--scale));
       line-height:1.25;
     }
     .memberMeta .small{
@@ -514,381 +528,271 @@
     @media (max-width: 980px){
       .memberAvatar{ height:300px; }
     }
-    /* =========================
-   FIX OVERFLOW for 2 slides
-   ========================= */
 
-/* 1) Slide "Nhóm 4" - member cards gọn lại */
-section[data-title="Nhóm 4"] .grid3{
-  gap: 12px;
-}
+    /* Slide specific fixes */
+    section[data-title="Nhóm 4"] .grid3{
+      gap: 12px;
+    }
 
-section[data-title="Nhóm 4"] .memberCard{
-  padding: 14px;
-  gap: 10px;
-}
+    section[data-title="Nhóm 4"] .memberCard{
+      padding: 14px;
+      gap: 10px;
+    }
 
-section[data-title="Nhóm 4"] .memberAvatar{
-  height: 210px;            /* giảm chiều cao ảnh */
-  border-radius: 16px;
-}
+    section[data-title="Nhóm 4"] .memberAvatar{
+      height: 210px;
+      border-radius: 16px;
+    }
 
-section[data-title="Nhóm 4"] .memberMeta h3{
-  font-size: 18px;
-  line-height: 1.25;
-  margin-bottom: 6px;
+    section[data-title="Nhóm 4"] .memberMeta h3{
+      font-size: 18px;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
-  /* chống tên quá dài */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+    section[data-title="Nhóm 4"] .memberMeta .small{
+      font-size: 14px;
+    }
 
-section[data-title="Nhóm 4"] .memberMeta .small{
-  font-size: 14px;
-}
+    section[data-title="Nhóm 4"] .grid2 > .card.soft{
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-/* 2) Slide "II. Nhân tố" - 4 card nhỏ bị dài -> thu gọn + chữ vừa */
-section[data-title="II. Nhân tố"] h2{
-  font-size: 40px;          /* giảm nhẹ tiêu đề slide này */
-  line-height: 1.15;
-}
+    section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags{
+      margin-top: auto;
+      margin-bottom: auto;
+      justify-content: center;
+      gap: 12px;
+    }
 
-section[data-title="II. Nhân tố"] .grid4{
-  gap: 12px;
-}
+    section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .tag{
+      font-size: 14px;
+      padding: 12px 14px;
+      border-radius: 999px;
+    }
 
-section[data-title="II. Nhân tố"] .grid4 .card.soft{
-  padding: 14px;            /* giảm padding để bớt dài */
-  border-radius: 18px;
-}
+    section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot{
+      width: 10px;
+      height: 10px;
+      box-shadow: 0 0 0 5px rgba(124,92,255,.12);
+    }
+    section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.blue{
+      box-shadow: 0 0 0 5px rgba(96,165,250,.12);
+    }
+    section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
+      box-shadow: 0 0 0 5px rgba(34,197,94,.12);
+    }
 
-/* tag tiêu đề trong mỗi card */
-section[data-title="II. Nhân tố"] .grid4 .card.soft .tag{
-  font-size: 12px;
-  padding: 8px 10px;
-}
+    /* Other slide fixes */
+    section[data-title="II. Nhân tố"] h2{
+      font-size: 40px;
+      line-height: 1.15;
+    }
 
-/* list bên trong 4 card nhỏ: giảm font + giảm khoảng cách dòng */
-section[data-title="II. Nhân tố"] .grid4 .card.soft ul{
-  font-size: 16px;          /* quan trọng: nhỏ lại để không tràn */
-  line-height: 1.55;
-  margin-top: 10px;
-  padding-left: 18px;
-}
+    section[data-title="II. Nhân tố"] .grid4{
+      gap: 12px;
+    }
 
-section[data-title="II. Nhân tố"] .grid4 .card.soft li{
-  margin: 6px 0;
-}
+    section[data-title="II. Nhân tố"] .grid4 .card.soft{
+      padding: 14px;
+      border-radius: 18px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
 
-/* nếu vẫn bị hơi dài: giới hạn chiều cao và cho cuộn nhẹ bên trong */
-section[data-title="II. Nhân tố"] .grid4 .card.soft{
-  max-height: 280px;
-  overflow: auto;
-}
+    section[data-title="II. Nhân tố"] .grid4 .card.soft::-webkit-scrollbar{
+      width: 0;
+      height: 0;
+    }
 
-/* scrollbar nhỏ gọn (đẹp hơn khi có cuộn) */
-section[data-title="II. Nhân tố"] .grid4 .card.soft::-webkit-scrollbar{
-  width: 8px;
-}
-section[data-title="II. Nhân tố"] .grid4 .card.soft::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.18);
-  border-radius: 999px;
-}
-/* =========================
-   Hide scrollbars (still scrollable) - II. Nhân tố
-   ========================= */
+    section[data-title="II. Nhân tố"] .grid4 .card.soft .tag{
+      font-size: 12px;
+      padding: 8px 10px;
+    }
 
-/* Không cho scroll ngang toàn slide này */
-section[data-title="II. Nhân tố"]{
-  overflow-x: hidden;
-}
+    section[data-title="II. Nhân tố"] .grid4 .card.soft ul{
+      font-size: 16px;
+      line-height: 1.55;
+      margin-top: 10px;
+      padding-left: 18px;
+    }
 
-/* Card nhỏ: vẫn cho cuộn dọc nếu thiếu chỗ, nhưng ẨN thanh scrollbar */
-section[data-title="II. Nhân tố"] .grid4 .card.soft{
-  overflow-y: auto;     /* vẫn cuộn dọc */
-  overflow-x: hidden;   /* không cuộn ngang */
-  scrollbar-width: none; /* Firefox: ẩn scrollbar */
-  -ms-overflow-style: none; /* IE/Edge cũ */
-}
+    section[data-title="II. Nhân tố"] .grid4 .card.soft li{
+      margin: 6px 0;
+    }
 
-/* Chrome/Safari/Edge: ẩn scrollbar */
-section[data-title="II. Nhân tố"] .grid4 .card.soft::-webkit-scrollbar{
-  width: 0;
-  height: 0;
-}
-/* =========================
-   FIX overflow - Slide IV. Hệ quả 2
-   ========================= */
+    section[data-title="IV. Hệ quả 2"] h2{
+      font-size: 38px;
+      line-height: 1.15;
+    }
 
-/* Giảm nhẹ tiêu đề ở slide này để chừa chỗ */
-section[data-title="IV. Hệ quả 2"] h2{
-  font-size: 38px;
-  line-height: 1.15;
-}
+    section[data-title="IV. Hệ quả 2"] .grid3 .card.soft{
+      padding: 14px;
+    }
 
-/* 3 card bên trái: thu padding + chữ nhỏ nhẹ */
-section[data-title="IV. Hệ quả 2"] .grid3 .card.soft{
-  padding: 14px;
-}
+    section[data-title="IV. Hệ quả 2"] .grid3 .card.soft ul{
+      font-size: 16px;
+      line-height: 1.55;
+      margin-top: 10px;
+      padding-left: 18px;
+    }
 
-/* List trong slide này: nhỏ lại để không tràn */
-section[data-title="IV. Hệ quả 2"] .grid3 .card.soft ul{
-  font-size: 16px;
-  line-height: 1.55;
-  margin-top: 10px;
-  padding-left: 18px;
-}
-section[data-title="IV. Hệ quả 2"] .grid3 .card.soft li{
-  margin: 6px 0;
-}
+    section[data-title="IV. Hệ quả 2"] .grid3 .card.soft li{
+      margin: 6px 0;
+    }
 
-/* Cột trái (card lớn): nếu quá dài thì cuộn dọc nhưng ẨN scrollbar */
-section[data-title="IV. Hệ quả 2"] .card{
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: none;       /* Firefox */
-  -ms-overflow-style: none;    /* Edge cũ */
-}
-section[data-title="IV. Hệ quả 2"] .card::-webkit-scrollbar{
-  width: 0;
-  height: 0;
-}
+    section[data-title="IV. Hệ quả 2"] .card{
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
 
-/* Ảnh bên phải: giảm chiều cao 1 chút cho cân bố cục */
-section[data-title="IV. Hệ quả 2"] .figure img{
-  height: 280px;
-}
-/* =========================
-   FIX right-side figure empty space (global)
-   Make .figure stretch full height, image fills remaining space
-   ========================= */
+    section[data-title="IV. Hệ quả 2"] .card::-webkit-scrollbar{
+      width: 0;
+      height: 0;
+    }
 
-/* Cho grid2 2 cột đều cao bằng nhau */
-.grid2{
-  align-items: stretch;
-}
+    section[data-title="IV. Hệ quả 2"] .figure img{
+      height: 280px;
+    }
 
-/* Figure/card bên phải sẽ cao bằng cột trái */
-.grid2 > .figure,
-.grid2 > aside.figure{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+    .grid2{
+      align-items: stretch;
+    }
 
-/* Ảnh chiếm hết không gian còn lại, không dư khoảng trống */
-.figure img{
-  height: auto !important;     /* override các height cũ */
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
-  object-fit: cover;
-}
+    .grid2 > .figure,
+    .grid2 > aside.figure{
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-/* Caption nằm dưới, không đẩy dư */
-.figure .cap{
-  flex: 0 0 auto;
-}
+    .figure img{
+      height: auto !important;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
+      object-fit: cover;
+    }
 
-/* Một số slide bạn dùng <aside class="card soft"> chứa video/ảnh:
-   nếu muốn nó cũng full height như cột trái */
-.grid2 > .card.soft{
-  height: 100%;
-}
-/* =========================
-   FIX right-side TEXT cards looking empty
-   ========================= */
+    .figure .cap{
+      flex: 0 0 auto;
+    }
 
-/* Card bên phải (text) full-height + layout đẹp */
+    .grid2 > .card.soft{
+      height: 100%;
+    }
 
+    @media (max-height: 820px){
+      .grid2 > .card.soft::after{ height: 170px; }
+    }
 
-/* Nếu màn hình thấp, giảm phần fill để không tràn */
-@media (max-height: 820px){
-  .grid2 > .card.soft::after{ height: 170px; }
-}
-/* =========================
-   FIX: right text card look intentional (no extra boxes)
-   ========================= */
+    section[data-title="V. Liên hệ"] .grid2{
+      align-items: stretch;
+    }
 
-/* Chỉ áp dụng cho card "Thông điệp chính" ở slide Nhóm 4 */
-section[data-title="Nhóm 4"] .grid2 > .card.soft{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+    section[data-title="V. Liên hệ"] .card{
+      padding: 18px;
+    }
+    section[data-title="V. Liên hệ"] .card.soft{
+      padding: 18px;
+    }
 
-/* Đẩy nội dung lên giữa cho cân */
-section[data-title="Nhóm 4"] .grid2 > .card.soft > h3{
-  margin-top: 6px;
-}
+    section[data-title="V. Liên hệ"] ul{
+      font-size: 16px;
+      line-height: 1.55;
+      margin-top: 10px;
+      padding-left: 18px;
+    }
+    section[data-title="V. Liên hệ"] li{
+      margin: 6px 0;
+    }
 
-section[data-title="Nhóm 4"] .grid2 > .card.soft > p{
-  margin-top: 10px;
-  font-size: 18px;
-  line-height: 1.75;
-}
+    section[data-title="Video GDucky"] .card::before,
+    section[data-title="Video GDucky"] .card.soft::before{
+      display: none !important;
+    }
 
-/* “tags” nằm dưới cùng card */
-section[data-title="Nhóm 4"] .grid2 > .card.soft .tags{
-  margin-top: auto;
-}
-/* =========================
-   FIX: Slide V (Liên hệ) fit on screen
-   ========================= */
-section[data-title="V. Liên hệ"] .grid2{
-  align-items: stretch;
-}
+    section[data-title="Video GDucky"] .card,
+    section[data-title="Video GDucky"] .card.soft{
+      padding-bottom: 14px !important;
+    }
 
-/* Giảm padding riêng slide này để vừa khít */
-section[data-title="V. Liên hệ"] .card{
-  padding: 18px;
-}
-section[data-title="V. Liên hệ"] .card.soft{
-  padding: 18px;
-}
+    section[data-title="Video GDucky"] .videoBox iframe{
+      height: 420px !important;
+    }
 
-/* Bullet list gọn hơn để không tràn */
-section[data-title="V. Liên hệ"] ul{
-  font-size: 16px;
-  line-height: 1.55;
-  margin-top: 10px;
-  padding-left: 18px;
-}
-section[data-title="V. Liên hệ"] li{
-  margin: 6px 0;
-}
-/* =========================
-   FIX empty-looking bottom area on Video GDucky slide
-   ========================= */
+    section[data-title="Video GDucky"] .videoBox + div{
+      display: none !important;
+    }
 
-/* Tắt lớp nền trang trí (card:before) riêng slide Video GDucky */
-section[data-title="Video GDucky"] .card::before,
-section[data-title="Video GDucky"] .card.soft::before{
-  display: none !important;
-}
+    section[data-title="Video GDucky"] .card.soft{
+      display:flex;
+      flex-direction:column;
+    }
+    section[data-title="Video GDucky"] .videoBox{
+      flex:1;
+    }
+    section[data-title="Video GDucky"] .videoBox iframe{
+      height:100% !important;
+    }
 
-/* Giảm padding-bottom để đáy card gọn hơn */
-section[data-title="Video GDucky"] .card,
-section[data-title="Video GDucky"] .card.soft{
-  padding-bottom: 14px !important;
-}
+    .grid2 > .card.soft::after{
+      content: none !important;
+      display: none !important;
+    }
 
-/* Nếu muốn cân cột phải đẹp hơn: video chiếm nhiều hơn, bớt khoảng trống dưới */
-section[data-title="Video GDucky"] .videoBox iframe{
-  height: 420px !important;
-}
-/* Remove the empty gradient box under the YouTube video (Video GDucky slide) */
-section[data-title="Video GDucky"] .videoBox + div{
-  display: none !important;
-}
-section[data-title="Video GDucky"] .card.soft{
-  display:flex;
-  flex-direction:column;
-}
-section[data-title="Video GDucky"] .videoBox{
-  flex:1;
-}
-section[data-title="Video GDucky"] .videoBox iframe{
-  height:100% !important;
-}
-/* =========================
-   FINAL FIX — remove all unwanted empty blocks on:
-   - Video GDucky
-   - V. Liên hệ
-   ========================= */
+    section[data-title="Video GDucky"] .grid2 > .card.soft{
+      height: 100%;
+      display:flex;
+      flex-direction:column;
+    }
 
-/* 1) TẮT HẲN pseudo-element tạo "box dư" (đang gây lỗi trên nhiều slide) */
-.grid2 > .card.soft::after{
-  content: none !important;
-  display: none !important;
-}
+    section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox{
+      flex: 1 1 auto;
+      margin-top: 12px;
+    }
 
-/* 2) VIDEO GDUCKY: card phải chỉ có video, không dư */
-section[data-title="Video GDucky"] .grid2 > .card.soft{
-  height: 100%;
-  display:flex;
-  flex-direction:column;
-}
+    section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox iframe{
+      height: 100% !important;
+    }
 
-section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox{
-  flex: 1 1 auto;
-  margin-top: 12px;
-}
+    section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox ~ div{
+      display:none !important;
+    }
 
-section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox iframe{
-  height: 100% !important;
-}
+    section[data-title="V. Liên hệ"] .grid2 > .card.soft{
+      height: 100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
 
-/* Nếu bạn còn 1 div rỗng dưới video (nếu lỡ thêm), ẩn luôn */
-section[data-title="Video GDucky"] .grid2 > .card.soft .videoBox ~ div{
-  display:none !important;
-}
+    section[data-title="V. Liên hệ"] .card{
+      padding: 18px !important;
+    }
+    section[data-title="V. Liên hệ"] .card.soft{
+      padding: 18px !important;
+    }
 
-/* 3) V. LIÊN HỆ: card phải không dư, căn giữa nội dung như "key takeaway" */
-section[data-title="V. Liên hệ"] .grid2 > .card.soft{
-  height: 100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-/* giảm spacing nhẹ để vừa khít, không tràn */
-section[data-title="V. Liên hệ"] .card{
-  padding: 18px !important;
-}
-section[data-title="V. Liên hệ"] .card.soft{
-  padding: 18px !important;
-}
-
-section[data-title="V. Liên hệ"] ul{
-  font-size: 16px !important;
-  line-height: 1.55 !important;
-  margin-top: 10px !important;
-  padding-left: 18px !important;
-}
-section[data-title="V. Liên hệ"] li{
-  margin: 6px 0 !important;
-}
-/* =========================
-   Nhóm 4 - đưa 3 tag vào giữa vùng trống + phóng to
-   ========================= */
-
-/* Card bên phải slide Nhóm 4 dùng flex để chia layout */
-section[data-title="Nhóm 4"] .grid2 > .card.soft{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Đưa cụm tag lên giữa phần trống */
-section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags{
-  margin-top: auto;       /* đẩy xuống */
-  margin-bottom: auto;    /* kéo lên => nằm giữa */
-  justify-content: center;
-  gap: 12px;
-}
-
-/* Phóng to tag cho cân bố cục */
-section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .tag{
-  font-size: 14px;
-  padding: 12px 14px;
-  border-radius: 999px;
-}
-
-/* Phóng to dot cho đẹp */
-section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot{
-  width: 10px;
-  height: 10px;
-  box-shadow: 0 0 0 5px rgba(124,92,255,.12);
-}
-section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.blue{
-  box-shadow: 0 0 0 5px rgba(96,165,250,.12);
-}
-section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
-  box-shadow: 0 0 0 5px rgba(34,197,94,.12);
-}
+    section[data-title="V. Liên hệ"] ul{
+      font-size: 16px !important;
+      line-height: 1.55 !important;
+      margin-top: 10px !important;
+      padding-left: 18px !important;
+    }
+    section[data-title="V. Liên hệ"] li{
+      margin: 6px 0 !important;
+    }
   </style>
 </head>
 <body>
@@ -932,7 +836,7 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
               <div class="divider"></div>
 
               <div class="grid3" style="margin-top:14px">
-                <!-- Hồ Văn Minh: ảnh 1 -->
+                <!-- Hồ Văn Minh -->
                 <div class="card soft memberCard">
                   <div class="memberAvatar">
                     <img src="assets/member-minh.jpg" alt="Hồ Văn Minh" />
@@ -943,7 +847,7 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
                   </div>
                 </div>
 
-                <!-- Trần Khánh Toàn: ảnh 3 -->
+                <!-- Trần Khánh Toàn -->
                 <div class="card soft memberCard">
                   <div class="memberAvatar">
                     <img src="assets/member-toan.jpg" alt="Trần Khánh Toàn" />
@@ -954,7 +858,7 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
                   </div>
                 </div>
 
-                <!-- Võ Hoàng Yến Nhi: ảnh 2 + FAFBIU22130 -->
+                <!-- Võ Hoàng Yến Nhi -->
                 <div class="card soft memberCard">
                   <div class="memberAvatar">
                     <img src="assets/member-nhi.jpg" alt="Võ Hoàng Yến Nhi" />
@@ -1382,8 +1286,7 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
             </div>
 
             <div class="quizGrid" id="quizGrid">
-
-              <!-- GIỮ NGUYÊN NỘI DUNG CÂU HỎI -->
+              <!-- 20 câu hỏi giữ nguyên -->
               <div class="qCard">
                 <div class="qTitle"><div class="qNum">1</div><div>Theo C.Mác, “tích lũy tư bản” thực chất là gì?</div></div>
                 <ul class="choices">
@@ -1597,12 +1500,10 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
                 </ul>
                 <div class="answer">Đáp án: B</div>
               </div>
-
             </div>
           </div>
         </div>
       </section>
-
     </div>
   </main>
 
@@ -1622,22 +1523,20 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
     const toggleAnsBtn = document.getElementById('toggleAnsBtn');
     const modePill = document.getElementById('modePill');
 
-    // Quiz refs
     const quizSlide = document.getElementById('quizSlide');
     const quizGrid = document.getElementById('quizGrid');
     const quizCards = quizGrid ? Array.from(quizGrid.querySelectorAll('.qCard')) : [];
     const quizCounter = document.getElementById('quizCounter');
     const quizFill = document.getElementById('quizFill');
 
-    let idx = 0;        // slide index
-    let qIdx = 0;       // quiz question index (0..19)
+    let idx = 0;
+    let qIdx = 0;
 
     function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
     function isQuizMode(){
       return sections[idx] === quizSlide;
     }
 
-    // Build nav
     sections.forEach((s, i) => {
       const title = s.getAttribute('data-title') || `Phần ${i+1}`;
       const b = document.createElement('button');
@@ -1648,17 +1547,13 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
 
     function renderQuiz(){
       if (!quizCards.length) return;
-
       qIdx = clamp(qIdx, 0, quizCards.length - 1);
-
       quizCards.forEach((c, i) => {
         c.classList.toggle('active', i === qIdx);
         if (i !== qIdx) c.classList.remove('show-answer');
       });
-
       if (quizCounter) quizCounter.textContent = `Câu ${qIdx + 1} / ${quizCards.length}`;
       if (quizFill) quizFill.style.width = `${((qIdx + 1) / quizCards.length) * 100}%`;
-
       if (toggleAnsBtn){
         const current = quizCards[qIdx];
         const showing = document.body.classList.contains('show-answers') || current.classList.contains('show-answer');
@@ -1669,25 +1564,15 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
     function update(){
       idx = clamp(idx, 0, sections.length - 1);
       slidesEl.style.transform = `translateX(${-idx * 100}vw)`;
-
       counterEl.innerHTML = `<b>${idx+1}</b> / ${sections.length}`;
       progressFill.style.width = `${((idx+1)/sections.length)*100}%`;
-
       Array.from(navEl.children).forEach((b, i) => b.classList.toggle('active', i === idx));
-
-      if (modePill){
-        modePill.style.display = isQuizMode() ? 'flex' : 'none';
-      }
-
-      if (isQuizMode()){
-        renderQuiz();
-      } else {
-        quizCards.forEach(c => c.classList.remove('show-answer'));
-      }
+      if (modePill) modePill.style.display = isQuizMode() ? 'flex' : 'none';
+      if (isQuizMode()) renderQuiz();
+      else quizCards.forEach(c => c.classList.remove('show-answer'));
     }
 
     function go(i){ idx = i; update(); }
-
     function nextSlide(){ idx++; update(); }
     function prevSlide(){ idx--; update(); }
 
@@ -1702,9 +1587,7 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
     function prevInQuiz(){
       const current = quizCards[qIdx];
       if (!current) return;
-
       const globalShowing = document.body.classList.contains('show-answers');
-
       if (!globalShowing && !current.classList.contains('show-answer')){
         current.classList.add('show-answer');
       } else {
@@ -1713,7 +1596,6 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
         if (qIdx < 0) qIdx = 0;
         renderQuiz();
       }
-
       if (toggleAnsBtn){
         const showing = globalShowing || quizCards[qIdx].classList.contains('show-answer');
         toggleAnsBtn.textContent = showing ? 'Ẩn đáp án' : 'Hiện đáp án';
@@ -1736,7 +1618,6 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
       toggleAnsBtn.addEventListener('click', () => {
         document.body.classList.toggle('show-answers');
         if (quizCards[qIdx]) quizCards[qIdx].classList.remove('show-answer');
-
         const showing = document.body.classList.contains('show-answers');
         toggleAnsBtn.textContent = showing ? 'Ẩn đáp án' : 'Hiện đáp án';
       });
@@ -1746,7 +1627,6 @@ section[data-title="Nhóm 4"] .grid2 > .card.soft .heroTags .dot.green{
       const t = e.target;
       const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
       if (typing) return;
-
       if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
       if (e.key === ' ') { e.preventDefault(); next(); }
