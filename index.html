@@ -431,6 +431,42 @@
       font-size:12px;
     }
 
+    /* ===== Members avatars (NEW) ===== */
+    .memberCard{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding:16px;
+    }
+    .memberAvatar{
+      width:100%;
+      height:210px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    .memberAvatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transform: translateZ(0);
+      filter: contrast(1.03) saturate(1.05);
+    }
+    .memberMeta h3{
+      margin:0 0 4px;
+      font-size:16px;
+      line-height:1.25;
+    }
+    .memberMeta .small{
+      margin:0;
+    }
+    @media (max-width: 980px){
+      .memberAvatar{ height:240px; }
+    }
+
   </style>
 </head>
 <body>
@@ -474,17 +510,37 @@
               <div class="divider"></div>
 
               <div class="grid3" style="margin-top:14px">
-                <div class="card soft">
-                  <h3>Hồ Văn Minh - IELSIU22354</h3>
-                  <p class="small">Nhóm trưởng</p>
+                <!-- Minh: ảnh 1 -->
+                <div class="card soft memberCard">
+                  <div class="memberAvatar">
+                    <img src="assets/member-minh.jpg" alt="Hồ Văn Minh" />
+                  </div>
+                  <div class="memberMeta">
+                    <h3>Hồ Văn Minh - IELSIU22354</h3>
+                    <p class="small">Nhóm trưởng</p>
+                  </div>
                 </div>
-                <div class="card soft">
-                  <h3>Trần Khánh Toàn - ITITIU20322</h3>
-                  <p class="small">Thành viên</p>
+
+                <!-- Toàn: ảnh 3 -->
+                <div class="card soft memberCard">
+                  <div class="memberAvatar">
+                    <img src="assets/member-toan.jpg" alt="Trần Khánh Toàn" />
+                  </div>
+                  <div class="memberMeta">
+                    <h3>Trần Khánh Toàn - ITITIU20322</h3>
+                    <p class="small">Thành viên</p>
+                  </div>
                 </div>
-                <div class="card soft">
-                  <h3>Võ Hoàng Yến Nhi</h3>
-                  <p class="small">Thành viên</p>
+
+                <!-- Nhi: ảnh 2 + mã -->
+                <div class="card soft memberCard">
+                  <div class="memberAvatar">
+                    <img src="assets/member-nhi.jpg" alt="Võ Hoàng Yến Nhi" />
+                  </div>
+                  <div class="memberMeta">
+                    <h3>Võ Hoàng Yến Nhi - FAFBIU22130</h3>
+                    <p class="small">Thành viên</p>
+                  </div>
                 </div>
               </div>
 
@@ -905,7 +961,6 @@
 
             <div class="quizGrid" id="quizGrid">
 
-              <!-- GIỮ NGUYÊN NỘI DUNG CÂU HỎI (y chang của bạn), chỉ thêm class active bằng JS -->
               <div class="qCard">
                 <div class="qTitle"><div class="qNum">1</div><div>Theo C.Mác, “tích lũy tư bản” thực chất là gì?</div></div>
                 <ul class="choices">
